@@ -18,16 +18,17 @@ function BottomBar({ onNav }) {
   // Use router location for highlighting the active nav
   const location = useLocation();
 
-  // Determine active key by route path
+  // Determine active key by route path (including Settings)
   let routeActive = "home";
   if (location.pathname === "/profile") {
     routeActive = "profile";
+  } else if (location.pathname === "/settings") {
+    routeActive = "settings";
   } else if (location.pathname === "/" || location.pathname === "") {
     routeActive = "home";
   }
-  // (settings reserved for future)
 
-  // Button definitions with SVG icons (chosen for clarity & style)
+  // Button definitions with SVG icons (including Settings SPA navigation)
   const navItems = [
     {
       key: "profile",
@@ -87,7 +88,7 @@ function BottomBar({ onNav }) {
           <path d="M19.4 15a1.79 1.79 0 00.7 2.1 2 2 0 01-2.7 2.7 1.8 1.8 0 00-2.1-.7 1.8 1.8 0 00-1.1 1.7V22a2 2 0 01-4 0v-.2a1.8 1.8 0 00-1.1-1.7 1.8 1.8 0 00-2.1.7A2 2 0 013.9 17.1a1.8 1.8 0 00.7-2.1 1.8 1.8 0 00-1.7-1.1H2a2 2 0 010-4h.1a1.8 1.8 0 001.7-1.1 1.8 1.8 0 00-.7-2.1A2 2 0 014.9 4.9a1.8 1.8 0 002.1.7A1.8 1.8 0 008.1 3.9V3a2 2 0 014 0v.1a1.8 1.8 0 001.1 1.7 1.8 1.8 0 002.1-.7A2 2 0 0120.1 6.9a1.8 1.8 0 00-.7 2.1c.21.46.21.98 0 1.43a1.8 1.8 0 001.7 1.12H22a2 2 0 010 4h-.2a1.75 1.75 0 00-1.7 1.12z" />
         </svg>
       ),
-      path: "#", // reserved for future
+      path: "/settings",
     },
   ];
 
