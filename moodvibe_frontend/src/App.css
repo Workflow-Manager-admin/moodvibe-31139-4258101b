@@ -11,18 +11,7 @@
   --border-color: #ececec;
   --shadow: 0 2px 12px rgba(255,179,71,0.10), 0 1.5px 7px rgba(110,198,255,0.08);
 
-  /* Extra vibrancy variables */
-  --sparkle: #ffe3c2;
-  --sparkle2: #ffc6d5;
-  --sparkle3: #e1f5fe;
-  --sparkle4: #ffe8f7;
-  --home-overlay: radial-gradient(circle at 26% 17%, #ffe3c240 0 34%, transparent 58%),
-                  radial-gradient(circle at 83% 34%, #ffc6d544 0 26%, transparent 48%),
-                  repeating-linear-gradient(124deg, #fffbe1 0 22px, #fffaee 22px 44px, #ffebf7 44px 66px, transparent 66px 88px);
-  --confetti-ani: mvConfettiGrand;
-  --tab-glow: 0 0 22px 4px var(--secondary)33, 0 0 12px 2px var(--accent)44;
-  --glow: 0 0 18px 6px var(--primary)33, 0 2px 18px var(--accent)14;
-  --glow-strong: 0 0 26px 10px var(--accent)44,0 3px 16px var(--primary)22;
+  /* Rounded corners */
   --card-radius: 17px;
   --btn-radius: 8.5px;
   --bar-radius: 20px;
