@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/moodvibe-31139-4258101b/moodvibe_frontend"
+}
