@@ -195,14 +195,37 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255,255,255,0.91);
+  background: rgba(255,255,255,0.96);
   border-radius: var(--bar-radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 1.5px 16px #6ec6ff17, 0 0.7px 7px #ff6f9140;
   position: relative;
   min-height: 52px;
   padding: 0 5px;
   overflow-x: auto;
   scrollbar-width: none;
+  /* Subtle animated gradient band on top for vibrancy */
+  /* Also add an animated shimmer band pseudo-element */
+  z-index: 2;
+}
+.tabs-area::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 15px; right: 15px; top: -4px;
+  height: 8px;
+  border-radius: 9px;
+  z-index: 2;
+  opacity: 0.69;
+  background: linear-gradient(93deg, #ffb34740 0 47%, #ff6f9129 62%, #6ec6ff60 100%);
+  filter: blur(4px) brightness(1.04);
+  animation: tabsGradientBar 9s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes tabsGradientBar {
+  0%   { background-position: 0 0; filter: blur(6px) hue-rotate(0);}
+  60%  { background-position: 33% 100%; filter: blur(5px) hue-rotate(13deg);}
+  90%  { background-position: 62% 0; filter: blur(7px) hue-rotate(18deg);}
+  100% { background-position: 80% 0; filter: blur(5px) hue-rotate(5deg);}
 }
 
 .tabs-area::-webkit-scrollbar {
