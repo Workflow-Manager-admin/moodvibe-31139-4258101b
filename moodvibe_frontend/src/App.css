@@ -21,7 +21,7 @@
 
 /* Banner header spacing (placed right below .app, above content) */
 .mv-banner-header {
-  margin-bottom: 8px;
+  margin-bottom: 1.5rem;
 }
 
 body {
