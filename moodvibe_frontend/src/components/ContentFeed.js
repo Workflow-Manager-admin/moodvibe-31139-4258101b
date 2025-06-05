@@ -15,9 +15,10 @@ import ContentCard from "./ContentCard";
  *
  * Props:
  *   mood (string): The currently selected user mood
+ *   selectedTab (string): The selected content type ("Memes" | "Jokes" | "GIFs" | "Quotes") (optional, for tab-based filtering)
  */
 // PUBLIC_INTERFACE
-function ContentFeed({ mood }) {
+function ContentFeed({ mood, selectedTab }) {
   // State: loading/error + all content types
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -144,7 +145,140 @@ function ContentFeed({ mood }) {
     );
   }
 
-  // Main content rendering (cards)
+  // Only render cards for the currently-selected tab
+  // Default to show all if selectedTab is not provided (for classic mode/fallback)
+  const renderSingleTabContent = () => {
+    switch (selectedTab) {
+      case "Memes":
+        return Array.isArray(content.memes) && content.memes.length > 0
+          ? content.memes.slice(0, 2).map((meme, idx) => (
+              <ContentCard
+                key={`meme-${idx}`}
+                contentType="Meme"
+                contentValue={
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <img
+                      src={meme.image}
+                      alt={meme.title}
+                      style={{
+                        maxWidth: 210,
+                        borderRadius: 8,
+                        marginBottom: 7,
+                        boxShadow: "0 2px 11px rgba(255,179,71,0.08)",
+                        background: "#fff4",
+                      }}
+                      loading="lazy"
+                    />
+                    <span style={{ color: "#e87a41", fontWeight: 600, fontSize: "1rem" }}>
+                      {meme.title}
+                    </span>
+                    <span
+                      style={{
+                        color: "#a0866a",
+                        fontSize: "0.85rem",
+                        opacity: 0.7,
+                        fontStyle: "italic",
+                        marginTop: 2
+                      }}
+                    >
+                      {meme.source ? `Source: ${meme.source}` : ""}
+                    </span>
+                  </div>
+                }
+              />
+            ))
+          : null;
+      case "Jokes":
+        return content.joke ? (
+          <ContentCard contentType="Joke" contentValue={content.joke} />
+        ) : null;
+      case "GIFs":
+        return content.gif ? (
+          <ContentCard contentType="GIF" contentValue={content.gif} />
+        ) : null;
+      case "Quotes":
+        return content.quote ? (
+          <ContentCard
+            contentType="Quote"
+            contentValue={
+              <>
+                <span>"{content.quote.text}"</span>
+                <br />
+                <span style={{ fontStyle: "italic", color: "#6cab46", fontSize: "0.97rem" }}>
+                  - {content.quote.author}
+                </span>
+              </>
+            }
+          />
+        ) : null;
+      default:
+        // Show all (legacy fallback)
+        return (
+          <>
+            {Array.isArray(content.memes) && content.memes.length > 0 &&
+              content.memes.slice(0, 2).map((meme, idx) => (
+                <ContentCard
+                  key={`meme-${idx}`}
+                  contentType="Meme"
+                  contentValue={
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <img
+                        src={meme.image}
+                        alt={meme.title}
+                        style={{
+                          maxWidth: 210,
+                          borderRadius: 8,
+                          marginBottom: 7,
+                          boxShadow: "0 2px 11px rgba(255,179,71,0.08)",
+                          background: "#fff4",
+                        }}
+                        loading="lazy"
+                      />
+                      <span style={{ color: "#e87a41", fontWeight: 600, fontSize: "1rem" }}>
+                        {meme.title}
+                      </span>
+                      <span
+                        style={{
+                          color: "#a0866a",
+                          fontSize: "0.85rem",
+                          opacity: 0.7,
+                          fontStyle: "italic",
+                          marginTop: 2
+                        }}
+                      >
+                        {meme.source ? `Source: ${meme.source}` : ""}
+                      </span>
+                    </div>
+                  }
+                />
+              ))
+            }
+            {content.joke && (
+              <ContentCard contentType="Joke" contentValue={content.joke} />
+            )}
+            {content.gif && (
+              <ContentCard contentType="GIF" contentValue={content.gif} />
+            )}
+            {content.quote && (
+              <ContentCard
+                contentType="Quote"
+                contentValue={
+                  <>
+                    <span>"{content.quote.text}"</span>
+                    <br />
+                    <span style={{ fontStyle: "italic", color: "#6cab46", fontSize: "0.97rem" }}>
+                      - {content.quote.author}
+                    </span>
+                  </>
+                }
+              />
+            )}
+          </>
+        );
+    }
+  };
+
+  // Main content rendering (single filtered by tab)
   return (
     <div
       className="content-feed"
@@ -160,73 +294,13 @@ function ContentFeed({ mood }) {
         boxShadow: "var(--shadow)",
         minHeight: 240,
       }}
-      aria-label="Content feed with uplifting cards"
-    >
-      {/* Dynamically render meme cards (limit 2 for demo) */}
-      {Array.isArray(content.memes) && content.memes.length > 0 &&
-        content.memes.slice(0, 2).map((meme, idx) => (
-          <ContentCard
-            key={`meme-${idx}`}
-            contentType="Meme"
-            contentValue={
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <img
-                  src={meme.image}
-                  alt={meme.title}
-                  style={{
-                    maxWidth: 210,
-                    borderRadius: 8,
-                    marginBottom: 7,
-                    boxShadow: "0 2px 11px rgba(255,179,71,0.08)",
-                    background: "#fff4",
-                  }}
-                  loading="lazy"
-                />
-                <span style={{ color: "#e87a41", fontWeight: 600, fontSize: "1rem" }}>
-                  {meme.title}
-                </span>
-                <span
-                  style={{
-                    color: "#a0866a",
-                    fontSize: "0.85rem",
-                    opacity: 0.7,
-                    fontStyle: "italic",
-                    marginTop: 2
-                  }}
-                >
-                  {meme.source ? `Source: ${meme.source}` : ""}
-                </span>
-              </div>
-            }
-          />
-        ))
+      aria-label={
+        selectedTab
+          ? `Content feed: Showing ${selectedTab} only`
+          : "Content feed with uplifting cards"
       }
-
-      {/* Joke Card */}
-      {content.joke && (
-        <ContentCard contentType="Joke" contentValue={content.joke} />
-      )}
-
-      {/* GIF Card */}
-      {content.gif && (
-        <ContentCard contentType="GIF" contentValue={content.gif} />
-      )}
-
-      {/* Quote Card */}
-      {content.quote && (
-        <ContentCard
-          contentType="Quote"
-          contentValue={
-            <>
-              <span>"{content.quote.text}"</span>
-              <br />
-              <span style={{ fontStyle: "italic", color: "#6cab46", fontSize: "0.97rem" }}>
-                - {content.quote.author}
-              </span>
-            </>
-          }
-        />
-      )}
+    >
+      {renderSingleTabContent()}
     </div>
   );
 }
