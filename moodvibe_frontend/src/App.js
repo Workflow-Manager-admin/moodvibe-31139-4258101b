@@ -8,6 +8,7 @@ import MoodSelector from './components/MoodSelector';
 import ContentFeed from './components/ContentFeed';
 import TabNavigation from './components/TabNavigation';
 import BottomBar from './components/BottomBar';
+import BannerHeader from './components/BannerHeader';
 
 // PUBLIC_INTERFACE
 /**
@@ -110,6 +111,7 @@ function InnerApp() {
   // Main themed app container
   return (
     <div className="app" style={{ paddingBottom: 74 }}>
+      <BannerHeader />
       <Routes>
         <Route
           path="/"
