@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "../App.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 /**
  * BottomBar
@@ -7,21 +8,35 @@ import "../App.css";
  * Features: Profile, Home, and Settings actions as icon buttons.
  * - App theme color gradients.
  * - Clear animated feedback on active/hover/focus.
- * - Ready for navigation integration via props/onClick in the future.
  * 
- * Props (future):
+ * Props:
  *   active (string): one of "home" | "profile" | "settings" (optional, highlight selected)
- *   onNav (fn): function(key) — for hooking up navigation actions
+ *   onNav (fn): function(key) — navigation hook (optional)
  */
 // PUBLIC_INTERFACE
 function BottomBar({ active = "home", onNav }) {
-  // For visual feedback demo, internal state highlights active btn if not controlled
-  const [localActive, setLocalActive] = useState(active);
+  // Use router location for highlighting the active nav
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Handler for button click: allows for optional future navigation hookup.
+  // Determine active key by route path
+  let routeActive = active;
+  if (location.pathname === "/profile") {
+    routeActive = "profile";
+  } else if (location.pathname === "/" || location.pathname === "") {
+    routeActive = "home";
+  }
+  // (settings reserved for future)
+
+  // Handler for SPA navigation via router
   function handleNav(key) {
-    setLocalActive(key);
-    if (onNav) onNav(key); // hook for future integration
+    if (key === "profile") {
+      navigate("/profile");
+    } else if (key === "home") {
+      navigate("/");
+    }
+    // call onNav if present for backward/compat
+    if (onNav) onNav(key);
   }
 
   // Button definitions with SVG icons (chosen for clarity & style)
