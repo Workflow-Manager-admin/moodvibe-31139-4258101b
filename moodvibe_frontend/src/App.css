@@ -9,6 +9,8 @@
   --text-color: #2d2d2d;
   --text-secondary: #6c757d;
   --border-color: #ececec;
+
+  /* Simple shadow */
   --shadow: 0 2px 12px rgba(255,179,71,0.10), 0 1.5px 7px rgba(110,198,255,0.08);
 
   /* Rounded corners */
@@ -17,21 +19,15 @@
   --bar-radius: 20px;
 }
 
-/* Banner header spacing (placed right below .app, above content) */
-.mv-banner-header {
-  margin-bottom: 1.5rem;
-}
-
 body {
   margin: 0;
+  background: var(--bg);
   font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background: var(--bg); /* fallback */
   color: var(--text-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
 }
 
 .app {
@@ -39,11 +35,14 @@ body {
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  transition: background 0.2s;
   padding: 0;
-  /* Ensures mobile friendliness */
   box-sizing: border-box;
   position: relative;
+}
+
+/* Banner/header spacing */
+.mv-banner-header {
+  margin-bottom: 1.5rem;
 }
 
 /* Mood Selector Area */
@@ -58,7 +57,6 @@ body {
   position: relative;
   z-index: 2;
   min-height: 98px;
-  overflow: visible;
 }
 
 .mood-selector-placeholder {
@@ -83,7 +81,6 @@ body {
   justify-content: center;
   position: relative;
   padding: 25px 0;
-  overflow: visible;
 }
 
 .content-feed-placeholder {
@@ -127,7 +124,7 @@ body {
   font-size: 1rem;
 }
 
-/* Simple tab underline for .tab-animated-underline (no shimmer/animation) */
+/* Tab underline (simple, no animation) */
 .tab-animated-underline {
   background: var(--primary);
   border-radius: 9px;
@@ -150,7 +147,6 @@ body {
   z-index: 13;
   max-width: 520px;
   margin: 0 auto;
-  /* No more "slide up" animation */
 }
 
 .bottom-bar-placeholder {
@@ -178,7 +174,7 @@ body {
   justify-content: center;
 }
 
-/* --- Profile Vibrant Styles (MoodVibe) --- */
+/* --- Profile Simpler Styles (pre-vibrant) --- */
 .mv-profile-vibrant {
   position: relative;
   margin: 0 auto;
@@ -191,37 +187,13 @@ body {
   align-items: center;
   background: var(--bg-secondary);
   border-radius: 30px;
-  box-shadow: var(--shadow), 0 8px 36px -10px var(--accent)25;
+  box-shadow: var(--shadow);
   margin-top: 36px;
   overflow: visible;
-  animation: mvProfileFade 0.75s cubic-bezier(.16,1.28,.37,1);
-}
-@keyframes mvProfileFade {
-  from { opacity: 0; transform: translateY(32px) scale(.97);}
-  to { opacity: 1; transform: translateY(0) scale(1);}
-}
-
-/* Joyful emoji stickers floating around the profile */
-.mv-profile-sticker {
-  position: absolute;
-  z-index: 22;
-  font-size: 1.65rem;
-  pointer-events: none;
-  opacity: .81;
-  user-select: none;
-  filter: saturate(1.2) drop-shadow(0 2px 9px #fff7);
-  animation: profileStickerDance 2.6s infinite alternate cubic-bezier(.6,1.7,.6,1.1);
-}
-.mv-profile-sticker1 { top: 24px; left: 5%; animation-delay: 0s;}
-.mv-profile-sticker2 { top: 11%; right: 6%; font-size: 1.34rem; animation-delay: 0.59s;}
-.mv-profile-sticker3 { bottom: 22%; left: 4%; font-size: 1.75rem; animation-delay: 1.13s;}
-@keyframes profileStickerDance {
-  0% { transform: translateY(0) rotate(-8deg); }
-  100% { transform: translateY(-13px) scale(1.13) rotate(8deg);}
 }
 
 .mv-profile-avatar-gradient {
-  background: var(--gradient-multicolor);
+  background: var(--bg-secondary);
   border-radius: 50%;
   width: 113px;
   height: 113px;
@@ -230,33 +202,11 @@ body {
   justify-content: center;
   margin-bottom: 14px;
   margin-top: -64px;
-  box-shadow: 0 4px 38px var(--accent)38, 0 6px 24px #ffc6d534, 0 0 0 7px #fff;
+  box-shadow: 0 4px 24px #ffb34744, 0 0 0 6px #fff;
   border: 5px solid #fff;
   position: relative;
-  transition: box-shadow .24s;
-  /* Animate a glow ring on Profile page avatar always */
-  animation: avatarGlowDance 2.8s infinite alternate cubic-bezier(.19,1.48,.31,1.18);
-}
-@keyframes avatarGlowDance {
-  0%   { box-shadow: 0 4px 38px var(--accent)18, 0 6px 24px #ffc6d534, 0 0 0 6px #fff; }
-  60%  { box-shadow: 0 15px 56px var(--secondary)27, 0 8px 25px #ff6f9155, 0 0 0 11px #ffe3c277;}
-  100% { box-shadow: 0 10px 54px var(--primary)43, 0 8px 30px #6ec6ff44, 0 0 0 13px #fff;}
 }
 
-/* Playful pop on mood selector controls (Home) */
-.mv-mood-selector-outer select:focus,
-.mv-mood-selector-outer input[type="text"]:focus {
-  box-shadow: 0 0 11px 2.7px var(--secondary)66, 0 2.9px 8px var(--accent)44 !important;
-  border: 2.5px solid var(--secondary);
-  transform: scale(1.05);
-}
-.mv-mood-selector-outer select:hover,
-.mv-mood-selector-outer input[type="text"]:hover {
-  box-shadow: 0 0 6px 1.2px var(--primary)44, 0 2.1px 7px var(--accent)27;
-  border: 2.2px solid var(--primary);
-  filter: brightness(1.05);
-  transform: scale(1.025);
-}
 .mv-profile-avatar-emoji {
   font-size: 4.6rem;
   line-height: 1;
@@ -269,13 +219,12 @@ body {
   margin: 0 0 6px 0;
   font-weight: 900;
   letter-spacing: 1.3px;
-  text-shadow: 0 3px 22px #fff7, 0 1px 4px var(--primary)15;
   text-align: center;
-  transition: text-shadow .22s;
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .mv-profile-desc {
   font-size: 1.08rem;
   color: var(--text-secondary);
@@ -291,14 +240,14 @@ body {
 
 .mv-profile-userstats {
   margin: 8px 0 0 0;
-  box-shadow: 0 2.5px 12px var(--secondary)18, var(--shadow);
+  box-shadow: var(--shadow);
   padding: 16px 17px;
   min-width: 220px;
   max-width: 330px;
   text-align: left;
   font-size: 1.13rem;
   border-radius: 15px;
-  border: 2.5px solid var(--accent);
+  border: 2px solid var(--accent);
   background: #fff;
   position: relative;
   z-index: 2;
@@ -307,20 +256,15 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: linear-gradient(89deg, var(--primary)44 73%, var(--secondary)33 100%);
+  background: var(--bg-secondary);
   color: var(--primary);
   border-radius: 18px;
   padding: 3.5px 12px 3.5px 8px;
   font-weight: 700;
   font-size: 1.09em;
-  box-shadow: 0 1.5px 7px var(--primary)23;
+  box-shadow: 0 1.5px 7px var(--primary)13;
   margin-left: 7px;
   margin-top: 3px;
-  animation: moodchipPulse 2.8s infinite alternate cubic-bezier(.4,1.7,.4,1.1);
-}
-@keyframes moodchipPulse {
-  0% { filter: brightness(1) drop-shadow(0 1px 4px #fff2);}
-  100% { filter: brightness(1.17) drop-shadow(0 2.5px 9px var(--accent)22);}
 }
 .mv-profile-moodemoji {
   font-size: 1.36em;
@@ -332,10 +276,10 @@ body {
   margin-top: 34px;
   width: 90%;
   max-width: 340px;
-  background: linear-gradient(90deg, #fffdf6 44%, #fff1fa 100%);
+  background: #fffdf6;
   border-radius: 18px;
   padding: 22px 7px 17px 7px;
-  box-shadow: 0 1.5px 11px var(--accent)14, var(--shadow);
+  box-shadow: var(--shadow);
   border-top: 1.5px solid var(--secondary);
   position: relative;
 }
@@ -362,7 +306,7 @@ body {
   gap: 7px;
 }
 .mv-profile-moodlist-item {
-  background: linear-gradient(90deg, var(--secondary)13 62%, var(--accent)08 100%);
+  background: #fff;
   border-radius: 11px;
   padding: 8px 13px 8px 13px;
   margin-bottom: 0;
@@ -373,14 +317,14 @@ body {
   font-size: 1.05rem;
   font-weight: 600;
   box-shadow: 0 0.9px 5.5px var(--secondary)11;
-  border: 1.7px solid var(--primary)18;
+  border: 1.7px solid var(--primary)8;
   position: relative;
   transition: box-shadow 0.19s, border 0.18s;
 }
 .mv-profile-moodlist-item:hover, .mv-profile-moodlist-item:focus-visible {
-  box-shadow: 0 3px 22px var(--accent)18, 0 2px 8px var(--primary)18;
+  box-shadow: 0 3px 18px var(--accent)8, 0 2px 8px var(--primary)8;
   border: 1.7px solid var(--primary);
-  background: linear-gradient(91deg, var(--accent)17 41%, var(--secondary)12 100%);
+  background: #fff;
   color: var(--primary);
   z-index: 1;
 }
@@ -394,7 +338,6 @@ body {
   font-weight: 800;
   color: var(--accent);
   font-size: 1.08em;
-  text-shadow: 0 1.5px 5px #fff5;
 }
 .mv-profile-history-time {
   color: var(--text-secondary);
@@ -407,12 +350,6 @@ body {
   font-size: 1.33em;
   margin-left: 6px;
   margin-right: -2px;
-  filter: drop-shadow(0 1.5px 8px var(--primary));
-  animation: crownWobble 2.65s infinite alternate cubic-bezier(.7,2.1,.34,1.2);
-}
-@keyframes crownWobble {
-  0% { transform: rotate(-9deg) scale(1);}
-  100% { transform: rotate(13deg) scale(1.16);}
 }
 
 .mv-profile-footer-cheer {
@@ -420,7 +357,6 @@ body {
   font-size: 1.19rem;
   color: var(--primary);
   font-weight: 800;
-  text-shadow: 0 1.5px 6px var(--primary)21, 0 2.5px 10px var(--accent)18;
   letter-spacing: 0.02em;
   display: flex;
   align-items: center;
@@ -431,7 +367,6 @@ body {
   color: var(--accent);
   font-weight: 900;
   margin: 0 4px;
-  text-shadow: 0 1.5px 4px var(--accent)28;
   font-size: 1.17em;
 }
 
@@ -451,7 +386,7 @@ body {
 
 /* End Profile Styles -- */
 
-/* Button style overhaul */
+/* Button style */
 .btn {
   background: linear-gradient(90deg, var(--primary), var(--secondary) 90%);
   color: #fff;
@@ -462,14 +397,13 @@ body {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 1.5px 8px rgba(255,179,71,0.14);
-  transition: background 0.24s, box-shadow 0.17s, transform 0.18s;
+  transition: background 0.16s, box-shadow 0.13s, transform 0.13s;
   outline: none;
 }
 
 .btn:active, .btn:focus-visible {
   transform: scale(0.96);
-  box-shadow: 0 2.5px 16px var(--secondary), 0 1px 4px #ffb34766;
-  background: linear-gradient(91deg, var(--secondary), var(--primary) 90%);
+  background: linear-gradient(90deg, var(--secondary), var(--primary) 90%);
 }
 
 .btn:hover {
@@ -523,7 +457,7 @@ body {
   }
 }
 
-/* Tablet and small desktop: tighten spacing, layout flows better */
+/* Tablet/small desktop adjust spacing */
 @media (max-width: 920px) and (min-width: 601px) {
   .content-feed-area, .tabs-area, .bottom-bar {
     max-width: 97vw;
@@ -556,7 +490,7 @@ body {
   }
 }
 
-/* Smooth transition for appearance and resizing */
+/* Transition: appearance and resizing */
 .app, .content-feed-area, .tabs-area, .content-feed, .mv-content-card {
   transition: border-radius 0.16s, max-width 0.16s, padding 0.17s, margin 0.14s,
     min-height 0.15s, box-shadow 0.17s, background 0.18s;
@@ -572,17 +506,17 @@ body {
 .mv-content-card:hover,
 .mv-content-card:focus-visible {
   box-shadow: 0 7px 28px 0 #bbb2, var(--shadow);
-  filter: none;
 }
+
 .mv-content-card:active {
   box-shadow: var(--shadow);
-  filter: none;
 }
+
 .mv-content-card::after {
   display: none;
 }
 
-/* Hide old/unused styles (navbar, hero, logo, etc. are not used in final app) */
+/* Hide old/unused styles for demo UI elements */
 .navbar, .logo, .logo-symbol, .container, .hero, .subtitle, .title, .description {
   display: none !important;
   height: 0 !important;
