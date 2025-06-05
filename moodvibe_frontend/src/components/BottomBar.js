@@ -140,19 +140,35 @@ function BottomBar({ active = "home", onNav }) {
     <nav className="bottom-bar" style={barStyle} aria-label="App bottom navigation">
       <style>
         {`
+        .bottom-bar-navbtn {
+          transition: color 0.16s, background 0.18s, filter 0.16s, transform 0.15s cubic-bezier(.35,1.3,.44,1), box-shadow 0.19s;
+          will-change: background, filter, transform, box-shadow;
+        }
         .bottom-bar-navbtn:focus-visible {
-          outline: 2px solid var(--primary);
-          box-shadow: 0 0 2px 1.5px var(--primary);
+          outline: 2px solid var(--accent);
+          background: rgba(110,198,255,0.15) !important;
+          box-shadow: 0 0 4px 2px var(--accent)22, 0 1.5px 7px var(--primary)33;
         }
         .bottom-bar-navbtn:hover:not([aria-current="true"]), 
         .bottom-bar-navbtn:active:not([aria-current="true"]) {
           color: var(--secondary);
-          background: rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.14);
           filter: brightness(1.08);
+          transform: scale(1.06);
+          z-index: 2;
         }
         .bottom-bar-navbtn[aria-current="true"] {
           color: var(--primary);
-          background: rgba(255,179,71,0.11);
+          background: rgba(255,179,71,0.13);
+          box-shadow: 0 1.5px 7px var(--primary)33, 0 0.5px 1px #ffd88a22;
+          transform: scale(1.03);
+        }
+        .bottom-bar-navbtn:active {
+          filter: brightness(0.96);
+          transform: scale(0.98);
+        }
+        .bottom-bar-navbtn span[role="img"], .bottom-bar-navbtn svg {
+          transition: filter 0.15s, transform 0.13s;
         }
         `}
       </style>
