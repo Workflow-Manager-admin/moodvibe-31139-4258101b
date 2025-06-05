@@ -1,15 +1,15 @@
 //
-// MoodVibe Content API Utility
-// File: moodvibe_frontend/src/api/contentApi.js
-//
-// Provides functions to fetch memes, jokes, GIFs, and quotes.
-// - Uses free public APIs where available
-// - Falls back to mock/demo data if requests fail or for local development (CORS, API quota, etc.)
-// - All functions take a `mood` argument for future mood-personalization support
-// - Designed for easy extension/integration with UI
-//
+ // MoodVibe Content API Utility
+ // File: moodvibe_frontend/src/api/contentApi.js
+ //
+ // Provides functions to fetch memes, jokes, GIFs, and quotes.
+ // - Uses free public APIs where available
+ // - Falls back to mock/demo data if requests fail or for local development (CORS, API quota, etc.)
+ // - All functions take a `mood` argument for future mood-personalization support
+ // - Designed for easy extension/integration with UI
+ //
 
-// MOCK DATA (used for local dev or fallback)
+ // MOCK DATA (used for local dev or fallback)
 const MOCK_MEMES = [
   {
     title: "Hang in there",
@@ -47,7 +47,6 @@ const MOCK_QUOTES = [
 ];
 
 // --- Utility Fetch Helpers (with fallback to mock data) ---
-
 async function fetchJson(url, options = {}, fallback) {
   try {
     const resp = await fetch(url, options);
