@@ -180,59 +180,7 @@ function BottomBar({ onNav }) {
       </style>
       {navItems.map((item) => {
         const isActive = (routeActive === item.key);
-        // "Settings" is future only - not SPA nav yet
-        if (item.key === "settings" || !item.path || item.path === "#") {
-          return (
-            <button
-              key={item.key}
-              className="bottom-bar-navbtn"
-              type="button"
-              aria-label={item.label}
-              aria-current={isActive ? "true" : undefined}
-              tabIndex={0}
-              style={btnStyle(isActive)}
-              disabled
-            >
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 32,
-                  height: 32,
-                  borderRadius: "50%",
-                  background: isActive
-                    ? "rgba(255,179,71,0.22)"
-                    : "rgba(255,255,255,0.11)",
-                  marginBottom: 5,
-                  boxShadow: isActive
-                    ? "0 0 0 2px var(--primary)"
-                    : "",
-                  transition: "background 0.18s, box-shadow 0.16s",
-                  color: isActive ? "var(--primary)" : "#fff",
-                }}
-              >
-                {item.icon}
-              </span>
-              <span
-                style={{
-                  fontSize: "0.99rem",
-                  marginTop: 1,
-                  letterSpacing: 0.7,
-                  color: isActive ? "var(--primary)" : "#fff",
-                  fontWeight: isActive ? 700 : 500,
-                  textShadow: isActive
-                    ? "0 1px 3px #fff2"
-                    : "0 1px 3px #3333",
-                  transition: "color 0.18s"
-                }}
-              >
-                {item.label}
-              </span>
-            </button>
-          );
-        }
-        // For actual navigation, use <Link> for SPA and highlight
+        // For all navigation, use <Link> for SPA including Settings
         return (
           <Link
             to={item.path}
