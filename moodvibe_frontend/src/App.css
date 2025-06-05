@@ -401,12 +401,28 @@ body::before {
   border: 5px solid #fff;
   position: relative;
   transition: box-shadow .24s;
+  /* Animate a glow ring on Profile page avatar always */
+  animation: avatarGlowDance 2.8s infinite alternate cubic-bezier(.19,1.48,.31,1.18);
 }
-.mv-profile-avatar-gradient:hover, .mv-profile-avatar-gradient:focus-visible {
-  box-shadow:
-    0 8px 42px var(--secondary)42,
-    0 2.5px 11px var(--primary)22,
-    0 0 0 8.5px #fff9;
+@keyframes avatarGlowDance {
+  0%   { box-shadow: 0 4px 38px var(--accent)18, 0 6px 24px #ffc6d534, 0 0 0 6px #fff; }
+  60%  { box-shadow: 0 15px 56px var(--secondary)27, 0 8px 25px #ff6f9155, 0 0 0 11px #ffe3c277;}
+  100% { box-shadow: 0 10px 54px var(--primary)43, 0 8px 30px #6ec6ff44, 0 0 0 13px #fff;}
+}
+
+/* Playful pop on mood selector controls (Home) */
+.mv-mood-selector-outer select:focus,
+.mv-mood-selector-outer input[type="text"]:focus {
+  box-shadow: 0 0 11px 2.7px var(--secondary)66, 0 2.9px 8px var(--accent)44 !important;
+  border: 2.5px solid var(--secondary);
+  transform: scale(1.05);
+}
+.mv-mood-selector-outer select:hover,
+.mv-mood-selector-outer input[type="text"]:hover {
+  box-shadow: 0 0 6px 1.2px var(--primary)44, 0 2.1px 7px var(--accent)27;
+  border: 2.2px solid var(--primary);
+  filter: brightness(1.05);
+  transform: scale(1.025);
 }
 .mv-profile-avatar-emoji {
   font-size: 4.6rem;
