@@ -143,13 +143,36 @@ body::before {
   background: var(--bg-secondary);
   border-radius: var(--bar-radius);
   min-height: 260px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), 0 5px 22px 2px #ffb34725, 0 1.5px 12px #ff6f9140;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   padding: 25px 0;
   animation: fadeInPageFeed 0.6s cubic-bezier(.31,1.5,.41,1);
+  /* Confetti overlay for party feel! */
+  overflow: visible;
+}
+.content-feed-area::after {
+  /* Sparky confetti shimmer layer using CSS */
+  content: '';
+  pointer-events: none;
+  z-index: 1;
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background-image:
+    radial-gradient(circle 1.3em at 10% 39%, #ffb34744 15%, transparent 75%),
+    radial-gradient(circle .9em at 78% 49%, #6ec6ff38 20%, transparent 80%),
+    radial-gradient(circle .95em at 41% 80%, #ff6f9133 20%, transparent 95%),
+    radial-gradient(circle .77em at 60% 21%, #ffc6d544 15%, transparent 85%);
+  opacity: 0.26;
+  animation: contentConfettiShimmer 7.5s linear infinite alternate;
+}
+@keyframes contentConfettiShimmer {
+  0%   { filter: hue-rotate(0deg) brightness(1.04) saturate(1.05); }
+  40%  { filter: hue-rotate(9deg) brightness(1.11) saturate(1.08); }
+  80%  { filter: hue-rotate(-11deg) brightness(1.13) saturate(1.21); }
+  100% { filter: hue-rotate(21deg) brightness(1.05) saturate(1.16);}
 }
 
 @keyframes fadeInPageFeed {
