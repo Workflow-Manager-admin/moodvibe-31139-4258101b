@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-// Use react-router-dom v6+ API (ensure version installed)
-// Only import BrowserRouter, Routes, Route, and useNavigate from react-router-dom
+
+// React Router v6+ imports (if missing, ensure installed)
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 
 import MoodSelector from './components/MoodSelector';
@@ -9,12 +9,10 @@ import ContentFeed from './components/ContentFeed';
 import TabNavigation from './components/TabNavigation';
 import BottomBar from './components/BottomBar';
 
-/**
- * ProfilePage Component
- * Simple cheerful page to show the user's (mock) profile info.
- * Layout and theming match MoodVibe's vibrant feel.
- */
 // PUBLIC_INTERFACE
+/**
+ * ProfilePage: Simple profile with vibrant MoodVibe theme.
+ */
 function ProfilePage() {
   return (
     <div
@@ -61,7 +59,6 @@ function ProfilePage() {
         Your Profile
       </h2>
       <div style={{ fontSize: "1.05rem", color: "var(--text-secondary)", marginBottom: 22 }}>
-        {" "}
         Vibrant MoodVibe user<br />
         <span style={{ color: "var(--accent)", fontWeight: 600 }}>Mood explorer</span>
       </div>
@@ -89,22 +86,18 @@ function ProfilePage() {
 }
 
 /**
- * InnerApp handles routes/layout so we keep StrictMode + Router separated for strict React compatibility.
+ * InnerApp: Contains the routed layout for MoodVibe.
  */
 function InnerApp() {
-  // Mood state managed at the top level
   const [mood, setMood] = useState("");
-  // selectedTab determines visible content in the feed
   const [selectedTab, setSelectedTab] = useState("Memes");
 
-  // Route navigation helper for BottomBar
   const navigate = useNavigate();
 
   // PUBLIC_INTERFACE
-  // Callback for switching tabs
   const handleTabChange = (tab) => setSelectedTab(tab);
 
-  // Handle navigation for the bottom bar
+  // Navigation for bottom bar (routes home or profile)
   const handleBottomNav = (key) => {
     if (key === "profile") {
       navigate('/profile');
@@ -114,7 +107,7 @@ function InnerApp() {
     // (settings reserved for future)
   };
 
-  // Main layout (theme and padding retained for bottom bar position)
+  // Main themed app container
   return (
     <div className="app" style={{ paddingBottom: 74 }}>
       <Routes>
@@ -122,15 +115,12 @@ function InnerApp() {
           path="/"
           element={
             <>
-              {/* Mood Selector Area (Top) */}
               <div className="mood-selector-area">
                 <MoodSelector mood={mood} setMood={setMood} />
               </div>
-              {/* Tab Navigation */}
               <div className="tabs-area">
                 <TabNavigation selectedTab={selectedTab} onTabChange={handleTabChange} />
               </div>
-              {/* Content Feed */}
               <div className="content-feed-area">
                 <ContentFeed mood={mood} selectedTab={selectedTab} />
               </div>
@@ -139,7 +129,6 @@ function InnerApp() {
         />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
-      {/* Bottom Bar fixed to bottom, keep outside of routes for persistence */}
       <BottomBar onNav={handleBottomNav} />
     </div>
   );
@@ -147,6 +136,7 @@ function InnerApp() {
 
 // PUBLIC_INTERFACE
 function App() {
+  // Top-level router provider
   return (
     <BrowserRouter>
       <InnerApp />
