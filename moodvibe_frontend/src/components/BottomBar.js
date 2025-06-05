@@ -100,7 +100,6 @@ function BottomBar({ active = "home", onNav }) {
     },
   ];
 
-  // Styling for buttons and bar uses App.css theme variables, but adds enhanced states here for clarity.
   const barStyle = {
     width: "100%",
     minHeight: 58,
@@ -122,7 +121,7 @@ function BottomBar({ active = "home", onNav }) {
     right: 0,
   };
 
-  const btnStyle = (active) => ({
+  const btnStyle = (isActive) => ({
     flex: 1,
     border: "none",
     background: "none",
@@ -130,9 +129,9 @@ function BottomBar({ active = "home", onNav }) {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    color: active ? "var(--primary)" : "#fff",
-    opacity: active ? 1 : 0.86,
-    fontWeight: active ? 700 : 500,
+    color: isActive ? "var(--primary)" : "#fff",
+    opacity: isActive ? 1 : 0.86,
+    fontWeight: isActive ? 700 : 500,
     fontSize: "0.99rem",
     position: "relative",
     outline: "none",
@@ -142,15 +141,15 @@ function BottomBar({ active = "home", onNav }) {
     minWidth: 56,
     height: 52,
     borderRadius: 13,
-    boxShadow: active
+    boxShadow: isActive
       ? "0 1.5px 8px var(--primary), 0 0.5px 1px #fff6"
       : "none",
-    background: active
+    background: isActive
       ? "rgba(255,255,255,0.09)"
       : "transparent",
   });
 
-  // Visual feedback for hover/focus/active via inline <style>
+  // Render SPA navigation and highlight active per route
   return (
     <nav className="bottom-bar" style={barStyle} aria-label="App bottom navigation">
       <style>
@@ -164,7 +163,7 @@ function BottomBar({ active = "home", onNav }) {
           background: rgba(110,198,255,0.15) !important;
           box-shadow: 0 0 4px 2px var(--accent)22, 0 1.5px 7px var(--primary)33;
         }
-        .bottom-bar-navbtn:hover:not([aria-current="true"]), 
+        .bottom-bar-navbtn:hover:not([aria-current="true"]),
         .bottom-bar-navbtn:active:not([aria-current="true"]) {
           color: var(--secondary);
           background: rgba(255,255,255,0.14);
@@ -188,7 +187,7 @@ function BottomBar({ active = "home", onNav }) {
         `}
       </style>
       {navItems.map((item) => {
-        const isActive = (localActive === item.key);
+        const isActive = (routeActive === item.key);
         return (
           <button
             key={item.key}
