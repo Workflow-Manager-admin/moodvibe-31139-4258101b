@@ -14,13 +14,14 @@ import BottomBar from './components/BottomBar';
 function App() {
   // Mood state managed at the top level
   const [mood, setMood] = useState("");
-  // NEW: selectedTab for Memes | Jokes | GIFs | Quotes
+  // selectedTab determines visible content in the feed
   const [selectedTab, setSelectedTab] = useState("Memes");
 
-  // Handler for switching tabs with animated feedback
+  // PUBLIC_INTERFACE
+  // Callback for switching tabs
   const handleTabChange = (tab) => setSelectedTab(tab);
 
-  /** Render a filtered ContentFeed so only the selected tab's content is visible */
+  // Render ContentFeed showing only content for the selected tab
   function renderFilteredContentFeed() {
     return (
       <ContentFeed mood={mood} selectedTab={selectedTab} />
@@ -31,23 +32,18 @@ function App() {
     <div className="app">
       {/* Mood Selector Area (Top) */}
       <div className="mood-selector-area">
-        {/* MoodSelector UI with lifted state */}
+        {/* MoodSelector UI */}
         <MoodSelector mood={mood} setMood={setMood} />
       </div>
-
       {/* Tab Navigation */}
       <div className="tabs-area">
-        {/* Animated, themed TabNavigation - above content feed for better UX on mobile */}
         <TabNavigation selectedTab={selectedTab} onTabChange={handleTabChange} />
       </div>
-
-      {/* Content Feed (Center) - only show selected type */}
+      {/* Content Feed */}
       <div className="content-feed-area">
-        {/* Vibrant Content Feed, filtered by selected tab */}
         {renderFilteredContentFeed()}
       </div>
-
-      {/* Bottom Bar */}
+      {/* Bottom Bar fixed to bottom */}
       <BottomBar />
     </div>
   );
