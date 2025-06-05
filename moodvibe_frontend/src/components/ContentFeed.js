@@ -18,65 +18,67 @@ import ContentCard from "./ContentCard";
  */
 // PUBLIC_INTERFACE
 function ContentFeed({ mood }) {
-  // State for each content type
+  // State: loading/error + all content types
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [memes, setMemes] = useState([]);
-  const [joke, setJoke] = useState("");
-  const [gif, setGif] = useState("");
-  const [quote, setQuote] = useState(null);
+  const [content, setContent] = useState({
+    memes: [],
+    joke: "",
+    gif: "",
+    quote: null,
+  });
 
-  // Fetch all content types whenever the mood changes
+  // Ref: fetch on mood change
   useEffect(() => {
     let didCancel = false;
 
-    async function fetchContent() {
+    const fetchAllContent = async () => {
       setLoading(true);
       setError("");
       try {
-        // Parallel fetches for all types
-        const [memesData, jokeData, gifData, quoteData] = await Promise.all([
+        // Fetch all types in parallel
+        const [memes, joke, gif, quote] = await Promise.all([
           fetchMemes(mood),
           fetchJoke(mood),
           fetchGif(mood),
           fetchQuote(mood),
         ]);
         if (!didCancel) {
-          setMemes(memesData || []);
-          setJoke(jokeData || "");
-          setGif(gifData || "");
-          setQuote(quoteData || null);
+          setContent({
+            memes: memes || [],
+            joke: joke || "",
+            gif: gif || "",
+            quote: quote || null,
+          });
         }
       } catch (e) {
-        if (!didCancel) {
-          setError("Failed to fetch content. Please try again.");
-        }
+        if (!didCancel) setError("Failed to fetch content. Please try again later.");
       } finally {
         if (!didCancel) setLoading(false);
       }
-    }
+    };
 
-    // If no mood, clear content
     if (!mood) {
-      setMemes([]);
-      setJoke("");
-      setGif("");
-      setQuote(null);
-      setLoading(false);
+      setContent({
+        memes: [],
+        joke: "",
+        gif: "",
+        quote: null,
+      });
       setError("");
+      setLoading(false);
       return;
     }
 
-    fetchContent();
+    fetchAllContent();
 
     return () => {
       didCancel = true;
     };
   }, [mood]);
 
-  // Determine render state
+  // UI - Awaiting user mood
   if (!mood) {
-    // No mood selected yet
     return (
       <div
         className="content-feed"
@@ -87,7 +89,7 @@ function ContentFeed({ mood }) {
           justifyContent: "center",
           minHeight: 210,
           opacity: 0.93,
-          fontSize: "1.25rem"
+          fontSize: "1.25rem",
         }}
         aria-label="Awaiting user mood"
       >
@@ -99,6 +101,7 @@ function ContentFeed({ mood }) {
     );
   }
 
+  // UI - Loading
   if (loading) {
     return (
       <div
@@ -120,6 +123,7 @@ function ContentFeed({ mood }) {
     );
   }
 
+  // UI - Error
   if (error) {
     return (
       <div
@@ -140,7 +144,7 @@ function ContentFeed({ mood }) {
     );
   }
 
-  // Main content rendering - Meme(s), Joke, GIF, Quote
+  // Main content rendering (cards)
   return (
     <div
       className="content-feed"
@@ -158,65 +162,66 @@ function ContentFeed({ mood }) {
       }}
       aria-label="Content feed with uplifting cards"
     >
-      {/* Memes (may have multiple) */}
-      {Array.isArray(memes) && memes.length > 0 && memes.slice(0, 2).map((meme, i) => (
-        <ContentCard
-          key={`meme-${i}`}
-          contentType="Meme"
-          contentValue={
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <img
-                src={meme.image}
-                alt={meme.title}
-                style={{
-                  maxWidth: 210,
-                  borderRadius: 8,
-                  marginBottom: 7,
-                  boxShadow: "0 2px 11px rgba(255,179,71,0.08)",
-                  background: "#fff4",
-                }}
-                loading="lazy"
-              />
-              <span style={{ color: "#e87a41", fontWeight: 600, fontSize: "1rem" }}>
-                {meme.title}
-              </span>
-              <span
-                style={{
-                  color: "#a0866a",
-                  fontSize: "0.85rem",
-                  opacity: 0.7,
-                  fontStyle: "italic",
-                  marginTop: 2
-                }}
-              >
-                {/* Demo label for source */}
-                {meme.source ? `Source: ${meme.source}` : ""}
-              </span>
-            </div>
-          }
-        />
-      ))}
+      {/* Dynamically render meme cards (limit 2 for demo) */}
+      {Array.isArray(content.memes) && content.memes.length > 0 &&
+        content.memes.slice(0, 2).map((meme, idx) => (
+          <ContentCard
+            key={`meme-${idx}`}
+            contentType="Meme"
+            contentValue={
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <img
+                  src={meme.image}
+                  alt={meme.title}
+                  style={{
+                    maxWidth: 210,
+                    borderRadius: 8,
+                    marginBottom: 7,
+                    boxShadow: "0 2px 11px rgba(255,179,71,0.08)",
+                    background: "#fff4",
+                  }}
+                  loading="lazy"
+                />
+                <span style={{ color: "#e87a41", fontWeight: 600, fontSize: "1rem" }}>
+                  {meme.title}
+                </span>
+                <span
+                  style={{
+                    color: "#a0866a",
+                    fontSize: "0.85rem",
+                    opacity: 0.7,
+                    fontStyle: "italic",
+                    marginTop: 2
+                  }}
+                >
+                  {meme.source ? `Source: ${meme.source}` : ""}
+                </span>
+              </div>
+            }
+          />
+        ))
+      }
 
-      {/* Joke */}
-      {joke && (
-        <ContentCard contentType="Joke" contentValue={joke} />
+      {/* Joke Card */}
+      {content.joke && (
+        <ContentCard contentType="Joke" contentValue={content.joke} />
       )}
 
-      {/* GIF */}
-      {gif && (
-        <ContentCard contentType="GIF" contentValue={gif} />
+      {/* GIF Card */}
+      {content.gif && (
+        <ContentCard contentType="GIF" contentValue={content.gif} />
       )}
 
-      {/* Quote */}
-      {quote && (
+      {/* Quote Card */}
+      {content.quote && (
         <ContentCard
           contentType="Quote"
           contentValue={
             <>
-              <span>"{quote.text}"</span>
+              <span>"{content.quote.text}"</span>
               <br />
               <span style={{ fontStyle: "italic", color: "#6cab46", fontSize: "0.97rem" }}>
-                - {quote.author}
+                - {content.quote.author}
               </span>
             </>
           }
