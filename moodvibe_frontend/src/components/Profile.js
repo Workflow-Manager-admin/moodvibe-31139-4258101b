@@ -31,6 +31,7 @@ function Profile({ user, onUserChange }) {
     mood: user?.mood || "",
   });
   const [savedNotif, setSavedNotif] = useState("");
+  const [justSavedAuto, setJustSavedAuto] = useState(false);
 
   // today check for birthday effect
   const todayStr = new Date().toISOString().slice(5, 10); // MM-DD
@@ -48,14 +49,41 @@ function Profile({ user, onUserChange }) {
     [edit.mood, moodObj.emoji]
   );
 
+  // Helper for localStorage persistence (synchronous, fun UX: 🎉)
+  const persistProfile = (data, sticky) => {
+    try {
+      window.localStorage.setItem("moodvibe_userprofile", JSON.stringify(data));
+      if (sticky) {
+        setSavedNotif("Saved! 🎉");
+        setJustSavedAuto(true);
+        setTimeout(() => {
+          setSavedNotif("");
+          setJustSavedAuto(false);
+        }, 1100);
+      }
+    } catch {}
+  };
+
   // Save handler: triggers onUserChange upward and shows a little celebration
   function handleSave(e) {
     e.preventDefault();
     if (edit.name.trim()) {
       onUserChange({ ...edit });
+      persistProfile({ ...edit }, true);
       setSavedNotif("Profile saved! 👍");
       setTimeout(() => setSavedNotif(""), 1500);
     }
+  }
+
+  // Handler for controlled updates — update local state, parent, and localStorage
+  function handleFieldChange(field, value) {
+    setEdit(prev => {
+      const next = { ...prev, [field]: value };
+      // Push up to parent immediately (for unified app state)
+      onUserChange(next);
+      persistProfile(next, false);
+      return next;
+    });
   }
 
   // Emoji options for sticker visuals
