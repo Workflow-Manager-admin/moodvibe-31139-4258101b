@@ -138,16 +138,29 @@ function TabNavigation({ selectedTab, onTabChange }) {
         {`
           .tab-btn:active:not(.tab-active) {
             transform: scale(0.96);
-            filter: brightness(1.06);
+            filter: brightness(1.07);
           }
           .tab-active {
-            animation: tabPop 0.23s cubic-bezier(.37,1.8,.22,1);
+            animation: tabPop 0.25s cubic-bezier(.39,1.75,.21,1.06);
+            z-index: 2;
+          }
+          .tab-btn:focus-visible {
+            outline: 2.7px solid var(--accent);
+            box-shadow: 0 0 0 2.5px var(--secondary)55;
+          }
+          .tab-btn:hover:not(.tab-active) {
+            background: #fcf8ff;
+            filter: brightness(1.06);
           }
           @keyframes tabPop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.11) rotate(-1deg);}
-            85% { transform: scale(0.99) rotate(1deg);}
-            100% { transform: scale(1); }
+            0% { transform: scale(1);}
+            30% { transform: scale(1.13) rotate(-1.5deg);}
+            70% { transform: scale(0.99) rotate(1.7deg);}
+            100% { transform: scale(1);}
+          }
+          .tab-animated-underline {
+            will-change: left, background;
+            pointer-events: none;
           }
         `}
       </style>
