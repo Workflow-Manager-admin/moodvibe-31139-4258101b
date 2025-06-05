@@ -184,54 +184,61 @@ function Profile({ user, onUserChange }) {
           Username
           <span role="img" aria-label="wave" style={{ marginLeft: 7 }}>👋</span>
         </label>
-        <input
-          id="username"
-          name="username"
-          maxLength={18}
-          required
-          autoFocus
-          className="vibrant-border"
-          style={{
-            background: "#fff",
-            color: "var(--accent)",
-            padding: "7px 12px",
-            borderRadius: 8,
-            fontWeight: 700,
-            fontSize: "1.12em",
-            border: "2px solid var(--secondary)",
-            marginTop: 6,
-            marginBottom: 15,
-            width: "95%"
-          }}
-          value={edit.name}
-          onChange={e => setEdit((p) => ({ ...p, name: e.target.value }))}
-          placeholder="Enter your nickname…"
-        />
-
+        <div style={{display: "flex", alignItems: "center", gap: 7}}>
+          <input
+            id="username"
+            name="username"
+            maxLength={18}
+            required
+            autoFocus
+            className="vibrant-border"
+            style={{
+              background: "#fff",
+              color: "var(--accent)",
+              padding: "7px 12px",
+              borderRadius: 8,
+              fontWeight: 700,
+              fontSize: "1.12em",
+              border: "2px solid var(--secondary)",
+              marginTop: 6,
+              marginBottom: 15,
+              width: "95%"
+            }}
+            value={edit.name}
+            onChange={e => handleFieldChange("name", e.target.value)}
+            placeholder="Enter your nickname…"
+          />
+          {edit.name && <span role="img" aria-label="user" style={{fontSize:"1.41em",marginLeft:-6}}>⭐️</span>}
+        </div>
         {/* Birthday */}
         <label htmlFor="birthday" style={{ color: "var(--secondary)", fontWeight: 800, fontSize: "1.01em", display: "block" }}>
           Birthday
           <span role="img" aria-label="birthday cake" style={{ marginLeft: 6 }}>🎂</span>
         </label>
-        <input
-          id="birthday"
-          name="birthday"
-          type="date"
-          className="vibrant-border"
-          style={{
-            padding: "7px 10px",
-            borderRadius: 8,
-            fontWeight: 600,
-            fontSize: "1.04em",
-            border: "2px solid var(--primary)",
-            marginTop: 6,
-            marginBottom: 15,
-            color: "#e87a41",
-            width: "auto"
-          }}
-          value={edit.birthday || ""}
-          onChange={e => setEdit((p) => ({ ...p, birthday: e.target.value }))}
-        />
+        <div style={{display: "flex", alignItems: "center", gap: 8}}>
+          <input
+            id="birthday"
+            name="birthday"
+            type="date"
+            className="vibrant-border"
+            style={{
+              padding: "7px 10px",
+              borderRadius: 8,
+              fontWeight: 600,
+              fontSize: "1.04em",
+              border: "2px solid var(--primary)",
+              marginTop: 6,
+              marginBottom: 15,
+              color: "#e87a41",
+              width: "auto"
+            }}
+            value={edit.birthday || ""}
+            onChange={e => handleFieldChange("birthday", e.target.value)}
+          />
+          {edit.birthday && (
+            <span role="img" aria-label="calendar" style={{fontSize:"1.35em",marginLeft: 0, marginTop:2,marginBottom:10}}>🗓️</span>
+          )}
+        </div>
         {/* Live birthday greeting */}
         {isBirthday && (
           <div style={{
@@ -256,31 +263,34 @@ function Profile({ user, onUserChange }) {
           Current mood
           <span role="img" aria-label="lightning" style={{ marginLeft: 6 }}>⚡️</span>
         </label>
-        <select
-          id="mood"
-          name="mood"
-          className="vibrant-border"
-          style={{
-            padding: "7px 15px",
-            borderRadius: 8,
-            fontWeight: 700,
-            fontSize: "1.12em",
-            border: "2px solid var(--accent)",
-            marginTop: 7,
-            marginBottom: 8,
-            color: "var(--primary)",
-            width: "100%"
-          }}
-          value={edit.mood}
-          onChange={e => setEdit((p) => ({ ...p, mood: e.target.value }))}
-        >
-          <option value="">Select…</option>
-          {moodChoices.map(opt =>
-            <option key={opt.mood} value={opt.mood}>
-              {opt.emoji} {opt.mood}
-            </option>
-          )}
-        </select>
+        <div style={{display: "flex", alignItems: "center", gap:7}}>
+          <select
+            id="mood"
+            name="mood"
+            className="vibrant-border"
+            style={{
+              padding: "7px 15px",
+              borderRadius: 8,
+              fontWeight: 700,
+              fontSize: "1.12em",
+              border: "2px solid var(--accent)",
+              marginTop: 7,
+              marginBottom: 8,
+              color: "var(--primary)",
+              width: "100%"
+            }}
+            value={edit.mood}
+            onChange={e => handleFieldChange("mood", e.target.value)}
+          >
+            <option value="">Select…</option>
+            {moodChoices.map(opt =>
+              <option key={opt.mood} value={opt.mood}>
+                {opt.emoji} {opt.mood}
+              </option>
+            )}
+          </select>
+          {!!edit.mood && <span className="mv-profile-moodemoji" style={{marginBottom:6}}>{moodObj.emoji}</span>}
+        </div>
         {edit.mood && (
           <span className="mv-profile-moodchip"
             style={{
@@ -316,11 +326,21 @@ function Profile({ user, onUserChange }) {
             display: "block",
             marginTop: 10,
             fontWeight: 600,
-            color: "var(--success)",
-            fontSize: "1.04em",
+            color: justSavedAuto ? "var(--secondary)" : "var(--success)",
+            fontSize: "1.07em",
             letterSpacing: ".04em",
-            textShadow: "0 1.5px 7px #8ac92644",
+            textShadow: justSavedAuto 
+              ? "0 1.5px 8px var(--secondary)18" 
+              : "0 1.5px 7px #8ac92644",
             transition: "opacity 0.21s",
+            background: justSavedAuto
+              ? "linear-gradient(90deg, #eef8fa 51%, #fff5e4 100%)"
+              : "none",
+            borderRadius: justSavedAuto ? 11 : 0,
+            padding: justSavedAuto ? "4px 12px 4px 12px" : "0",
+            boxShadow: justSavedAuto
+              ? "0 1px 8px #6ec6ff44"
+              : "none",
           }}>
             {savedNotif} <span role="img" aria-label="thumbs up">👍</span>
           </span>
