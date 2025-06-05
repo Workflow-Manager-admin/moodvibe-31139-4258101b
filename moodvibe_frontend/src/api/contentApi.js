@@ -1,6 +1,6 @@
 //
-// MoodVibe Content API Utility
-// File: moodvibe_frontend/src/api/contentApi.js
+//// MoodVibe Content API Utility
+//// File: moodvibe_frontend/src/api/contentApi.js
 //
 // Provides functions to fetch memes, jokes, GIFs, and quotes.
 // - Uses free public APIs where available
