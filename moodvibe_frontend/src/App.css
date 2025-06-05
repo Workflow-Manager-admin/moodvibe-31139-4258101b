@@ -49,24 +49,16 @@ body {
 /* Mood Selector Area */
 .mood-selector-area {
   width: 100%;
-  background: var(--gradient-multicolor);
+  background: var(--bg-secondary);
   border-bottom-left-radius: 32px;
   border-bottom-right-radius: 32px;
   padding: 30px 12px 24px 12px;
-  box-shadow: var(--shadow), 0 2px 20px 2px #ffe8cf18, 0 1.5px 10px #ffd9ed33;
+  box-shadow: var(--shadow);
   text-align: center;
   position: relative;
   z-index: 2;
   min-height: 98px;
   overflow: visible;
-  /* Soft animated glow, extra attention */
-  animation: moodSelectorGlow 5s cubic-bezier(.43,2,.28,1) infinite alternate;
-}
-
-@keyframes moodSelectorGlow {
-  0%   { box-shadow: 0 2px 14px #ffb34733, 0 1.5px 7px #ff6f9133, var(--shadow); filter: brightness(1.03); }
-  60%  { box-shadow: 0 10px 34px #ffb34759, 0 6px 28px #6ec6ff38, 0 2px 6px #fff7d6bb; filter: brightness(1.09) saturate(1.16);}
-  100% { box-shadow: 0 14px 44px #6ec6ff50, 0 7px 20px #ffb34733, 0 1.5px 8px #ff6f9144, var(--shadow); filter: brightness(1.13) saturate(1.22);}
 }
 
 .mood-selector-placeholder {
@@ -85,41 +77,13 @@ body {
   background: var(--bg-secondary);
   border-radius: var(--bar-radius);
   min-height: 260px;
-  box-shadow: var(--shadow), 0 5px 22px 2px #ffb34725, 0 1.5px 12px #ff6f9140;
+  box-shadow: var(--shadow);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   padding: 25px 0;
-  animation: fadeInPageFeed 0.6s cubic-bezier(.31,1.5,.41,1);
-  /* Confetti overlay for party feel! */
   overflow: visible;
-}
-.content-feed-area::after {
-  /* Sparky confetti shimmer layer using CSS */
-  content: '';
-  pointer-events: none;
-  z-index: 1;
-  position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background-image:
-    radial-gradient(circle 1.3em at 10% 39%, #ffb34744 15%, transparent 75%),
-    radial-gradient(circle .9em at 78% 49%, #6ec6ff38 20%, transparent 80%),
-    radial-gradient(circle .95em at 41% 80%, #ff6f9133 20%, transparent 95%),
-    radial-gradient(circle .77em at 60% 21%, #ffc6d544 15%, transparent 85%);
-  opacity: 0.26;
-  animation: contentConfettiShimmer 7.5s linear infinite alternate;
-}
-@keyframes contentConfettiShimmer {
-  0%   { filter: hue-rotate(0deg) brightness(1.04) saturate(1.05); }
-  40%  { filter: hue-rotate(9deg) brightness(1.11) saturate(1.08); }
-  80%  { filter: hue-rotate(-11deg) brightness(1.13) saturate(1.21); }
-  100% { filter: hue-rotate(21deg) brightness(1.05) saturate(1.16);}
-}
-
-@keyframes fadeInPageFeed {
-  0% { opacity: 0; transform: translateY(22px) scale(.98);}
-  100% { opacity: 1; transform: translateY(0) scale(1);}
 }
 
 .content-feed-placeholder {
@@ -137,37 +101,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255,255,255,0.96);
+  background: #fff;
   border-radius: var(--bar-radius);
-  box-shadow: var(--shadow), 0 1.5px 16px #6ec6ff17, 0 0.7px 7px #ff6f9140;
+  box-shadow: var(--shadow);
   position: relative;
   min-height: 52px;
   padding: 0 5px;
   overflow-x: auto;
   scrollbar-width: none;
-  /* Subtle animated gradient band on top for vibrancy */
-  /* Also add an animated shimmer band pseudo-element */
   z-index: 2;
-}
-.tabs-area::before {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 15px; right: 15px; top: -4px;
-  height: 8px;
-  border-radius: 9px;
-  z-index: 2;
-  opacity: 0.69;
-  background: linear-gradient(93deg, #ffb34740 0 47%, #ff6f9129 62%, #6ec6ff60 100%);
-  filter: blur(4px) brightness(1.04);
-  animation: tabsGradientBar 9s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-@keyframes tabsGradientBar {
-  0%   { background-position: 0 0; filter: blur(6px) hue-rotate(0);}
-  60%  { background-position: 33% 100%; filter: blur(5px) hue-rotate(13deg);}
-  90%  { background-position: 62% 0; filter: blur(7px) hue-rotate(18deg);}
-  100% { background-position: 80% 0; filter: blur(5px) hue-rotate(5deg);}
 }
 
 .tabs-area::-webkit-scrollbar {
@@ -185,22 +127,10 @@ body {
   font-size: 1rem;
 }
 
-/* Fancy tab underline shimmer for .tab-animated-underline (TabNavigation) */
+/* Simple tab underline for .tab-animated-underline (no shimmer/animation) */
 .tab-animated-underline {
-  animation: tabUnderlineShine 3.6s linear infinite;
-  background: linear-gradient(
-    94deg,
-    var(--primary)66 0%,
-    var(--secondary)55 60%,
-    var(--accent)88 90%,
-    #fff 100%
-  ) !important;
-  background-size: 400% 100%;
-}
-@keyframes tabUnderlineShine {
-  0%   { background-position: 0% 0%; }
-  80%  { background-position: 100% 0%; }
-  100% { background-position: 0% 0%; }
+  background: var(--primary);
+  border-radius: 9px;
 }
 
 /* Bottom Bar */
