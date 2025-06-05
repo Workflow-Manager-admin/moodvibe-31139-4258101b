@@ -131,7 +131,7 @@ function InnerApp() {
           }
         />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/settings" element={<require('./components/Settings').default />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
       <BottomBar onNav={handleBottomNav} />
     </div>
