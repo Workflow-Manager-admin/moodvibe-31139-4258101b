@@ -183,7 +183,9 @@ function BottomBar({ active = "home", onNav }) {
             aria-current={isActive ? "true" : undefined}
             tabIndex={0}
             style={btnStyle(isActive)}
-            onClick={() => handleNav(item.key)}
+            onClick={() => {
+              handleNav(item.key);
+            }}
           >
             <span
               style={{
