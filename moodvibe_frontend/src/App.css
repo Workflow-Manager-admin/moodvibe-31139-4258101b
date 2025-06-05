@@ -19,6 +19,11 @@
   --bar-radius: 20px;
 }
 
+/* Banner header spacing (placed right below .app, above content) */
+.mv-banner-header {
+  margin-bottom: 8px;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
