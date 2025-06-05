@@ -89,11 +89,173 @@ function InnerApp() {
   const todayStr = new Date().toISOString().slice(5, 10); // MM-DD
   const isBirthday = user.birthday && user.birthday.slice(5, 10) === todayStr;
 
-  // Future: show toast, celebration popup, etc, if isBirthday
+  // Birthday popup state: dismissed flag in state + session/localStorage
+  // Show popup only if: today is birthday, not yet dismissed today (key should be 'moodvibe_birthday_popup_<yyyy-mm-dd>')
+  const [birthdayPopupDismissed, setBirthdayPopupDismissed] = React.useState(false);
+
+  React.useEffect(() => {
+    // Birthday popup is only open if today is birthday and not already dismissed today
+    if (isBirthday) {
+      const popupKey = "moodvibe_birthday_popup_" + todayStr;
+      const dismissed = localStorage.getItem(popupKey) === "dismissed";
+      setBirthdayPopupDismissed(!!dismissed);
+    } else {
+      setBirthdayPopupDismissed(false);
+    }
+  }, [isBirthday, todayStr]);
+
+  const handleDismissBirthday = React.useCallback(() => {
+    const popupKey = "moodvibe_birthday_popup_" + todayStr;
+    localStorage.setItem(popupKey, "dismissed");
+    setBirthdayPopupDismissed(true);
+  }, [todayStr]);
+
+  // Confetti SVG helper (CSS lightweight, no dependencies)
+  function ConfettiBlast() {
+    // 12 colorful confetti elements with css animation
+    return (
+      <div style={{
+        position: "absolute",
+        left: 0, top: 0, width: "100%", height: "100%", zIndex: 2,
+        pointerEvents: "none", overflow: "visible",
+      }} aria-hidden="true">
+        {[...Array(22)].map((_, i) => (
+          <span
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${5 + Math.random()*90}%`,
+              top: `${(i%7)*12+5}%`,
+              width: 10 + Math.random()*7, height: 10 + Math.random()*8,
+              background: [
+                "#FFB347", "#FF6F91", "#6EC6FF", "#8ac926",
+                "#f9ca24", "#FF79C6", "#FFF1EA", "#FFEB3B"
+              ][i%8],
+              opacity: 0.82 + Math.random()*0.14,
+              borderRadius: "50%",
+              boxShadow: "0 1px 9px #fff8",
+              animation: `mvConfettiDrop 1.33s ${0.03*i}s cubic-bezier(.28,1.2,.22,1.06) both`,
+              transform: `scale(${1-(i%4)*0.09}) rotate(${Math.random()*360}deg)`,
+              filter: "blur(.2px)"
+            }}
+          >
+            <span style={{
+              opacity: 0, fontSize: 0
+            }}>🎊</span>
+          </span>
+        ))}
+        <style>{`
+          @keyframes mvConfettiDrop {
+            from { 
+              opacity: .09; 
+              transform: scale(.5) translateY(-38px);
+            }
+            70% {
+              opacity: .9;
+            }
+            to {
+              opacity: 1;
+              transform: scale(1) translateY(49px);
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Public: Birthday Popup component
+  function BirthdayPopup({ userName, onDismiss }) {
+    return (
+      <div
+        className="mv-birthday-popup"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Birthday wish"
+        tabIndex={0}
+        style={{
+          position: "fixed",
+          left: 0, right: 0, top: 0, bottom: 0,
+          zIndex: 1010,
+          background: "rgba(255,111,145,0.13)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
+          minWidth: "100vw",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            background: "linear-gradient(120deg, #FFF7D6 83%, #FFE3F8 100%)",
+            border: "4.2px solid var(--primary)",
+            borderRadius: 24,
+            boxShadow: "0 10px 48px #ffb34755, 0 2px 26px var(--secondary)17, var(--shadow)",
+            padding: "40px 36px 32px 36px",
+            minWidth: 330,
+            maxWidth: "90vw",
+            minHeight: 188,
+            textAlign: "center",
+            color: "var(--accent)",
+            fontWeight: 900,
+            fontSize: "1.67rem",
+            letterSpacing: ".035em",
+            animation: "mvCardFadeIn 0.82s cubic-bezier(.19,1.5,.29,1)",
+            overflow: "visible"
+          }}
+        >
+          <ConfettiBlast />
+          <span style={{ fontSize: "2.75em", verticalAlign: "-0.4em" }} role="img" aria-label="birthday cake">
+            🎂
+          </span>
+          <br />
+          <div style={{ margin: "0 0 10px 0", letterSpacing: "0.01em", color: "var(--primary)" }}>
+            Happy Birthday,&nbsp;
+            <span style={{
+              color: "var(--accent)",
+              textShadow: "0 2.5px 9px #fff5,0 3px 11px var(--secondary)22"
+            }}>{userName || "MoodViber"}</span>!
+          </div>
+          <span style={{ fontSize: "1.77em", color: "var(--accent)", filter:"saturate(1.1)", lineHeight: "1.2", marginBottom: 5 }}>
+            <span role="img" aria-label="cheer">🎉</span>
+            <span role="img" aria-label="sparkle">✨</span>
+            <span role="img" aria-label="smile">😄</span> &nbsp;
+            Sending MoodVibe happiness!
+            &nbsp;<span role="img" aria-label="confetti ball">🎊</span>
+            <span role="img" aria-label="balloon">🎈</span>
+          </span>
+          <br />
+          <button
+            className="btn"
+            style={{
+              marginTop: 26,
+              background: "linear-gradient(90deg, var(--accent) 70%, var(--secondary) 98%)",
+              color: "#fff",
+              fontWeight: 800,
+              fontSize: "1.12em",
+              borderRadius: 9,
+              boxShadow: "0 2px 12px #ffb34755",
+              border: "none",
+              padding: "10.5px 24px",
+              cursor: "pointer"
+            }}
+            onClick={onDismiss}
+            autoFocus
+            tabIndex={0}
+          >
+            <span role="img" aria-label="close">❌</span> Close
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app" style={{ paddingBottom: 74 }}>
       <BannerHeader />
+      {isBirthday && !birthdayPopupDismissed && (
+        <BirthdayPopup userName={user.name} onDismiss={handleDismissBirthday} />
+      )}
       <Routes>
         <Route
           path="/"
@@ -106,25 +268,25 @@ function InnerApp() {
               <div className="tabs-area">
                 <TabNavigation selectedTab={selectedTab} onTabChange={handleTabChange} />
               </div>
-              {/* Birthday celebration on home page */}
-              {isBirthday && (
+              {/* Birthday celebration banner on home page after popup is dismissed */}
+              {isBirthday && birthdayPopupDismissed && (
                 <div style={{
-                  fontSize: "1.33rem",
+                  fontSize: "1.32rem",
                   background: "var(--gradient-multicolor)",
-                  padding: "22px 24px 13px 24px",
-                  borderRadius: 23,
-                  margin: "14px auto 5px auto",
-                  maxWidth: 380,
+                  padding: "16px 18px 10px 18px",
+                  borderRadius: 19,
+                  margin: "13px auto 7px auto",
+                  maxWidth: 400,
                   boxShadow: "0 2px 18px #ffb34733",
                   textAlign: "center",
                   color: "var(--accent)",
                   fontWeight: 800,
-                  letterSpacing: "0.06em",
-                  animation: "mvCardFadeIn 0.82s cubic-bezier(.19,1.5,.29,1)",
+                  letterSpacing: "0.05em",
+                  animation: "mvCardFadeIn 0.6s cubic-bezier(.19,1.5,.29,1)",
                 }}>
-                  <span role="img" aria-label="birthday cake" style={{ fontSize: "2.2em", verticalAlign: "-0.25em" }}>🎂</span>
+                  <span role="img" aria-label="birthday cake" style={{ fontSize: "1.7em", verticalAlign: "-0.25em" }}>🎂</span>
                   &nbsp;Happy Birthday, {user.name || "MoodViber"}!&nbsp;
-                  <span role="img" aria-label="party popper">🎉</span><span role="img" aria-label="thumbs up">👍</span>
+                  <span role="img" aria-label="party popper">🎉</span>
                 </div>
               )}
               <div className="content-feed-area">
