@@ -25,6 +25,7 @@ function MoodSelector({ mood, setMood }) {
   ];
   const [customMood, setCustomMood] = useState("");
   const [detectionState, setDetectionState] = useState("idle");
+  const [aiBtnAnim, setAiBtnAnim] = useState(false);
 
   // Handler for dropdown or custom text change
   const handleMoodChange = (event) => {
@@ -41,24 +42,71 @@ function MoodSelector({ mood, setMood }) {
   // Stub for AI detection
   const handleDetectMood = () => {
     setDetectionState("detecting");
+    setAiBtnAnim(true);
     // Placeholder: simulate async call & detected mood
     setTimeout(() => {
       const detected = "Happy"; // Stubbed detected mood
       setMood(detected);
       setCustomMood("");
       setDetectionState("detected");
+      setAiBtnAnim(false);
       setTimeout(() => setDetectionState("idle"), 1200);
     }, 1200);
   };
 
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      gap: 16,
-      justifyContent: "center",
-      flexWrap: "wrap"
-    }}>
+    <div
+      className="mv-mood-selector-outer"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+        justifyContent: "center",
+        flexWrap: "wrap",
+        position: "relative"
+      }}
+    >
+      <style>
+        {`
+          /* MoodSelector Animation: Glow on AI detect, subtle pop/select for input/select */
+          .mv-mood-selector-outer select,
+          .mv-mood-selector-outer input[type="text"] {
+            transition: box-shadow 0.19s cubic-bezier(.39,1.4,.23,1), border 0.13s;
+          }
+          .mv-mood-selector-outer select:focus,
+          .mv-mood-selector-outer input[type="text"]:focus {
+            box-shadow: 0 0 0 2.7px var(--secondary)88, 0 1.5px 7px var(--accent)44;
+            border: 2.5px solid var(--secondary);
+          }
+          .mv-mood-selector-aibtn {
+            transition: filter 0.18s, box-shadow 0.21s, background 0.19s, transform 0.13s;
+            will-change: box-shadow, background, filter, transform;
+          }
+          .mv-mood-selector-aibtn-detecting {
+            animation: moodBtnShimmer 1.35s infinite linear;
+            box-shadow: 0 0 8px 4px var(--accent), 0 0 14px 10px var(--primary)44;
+            filter: brightness(1.15) saturate(1.14);
+            outline: 2.2px solid var(--accent);
+          }
+          .mv-mood-selector-aibtn-detected {
+            animation: moodGlow 1.05s 1 cubic-bezier(.53,1.8,.27,1);
+            box-shadow: 0 0 19px 9px var(--success)99, 0 0 46px 22px var(--secondary)11;
+            filter: brightness(1.26) saturate(1.23);
+            outline: 2.8px solid var(--success);
+            background: linear-gradient(91deg, var(--success) 66%, var(--secondary) 100%);
+          }
+          @keyframes moodGlow {
+            0% { box-shadow: 0 0 1px 1px var(--success)00; }
+            50% { box-shadow: 0 0 28px 18px var(--success)99, 0 0 46px 22px var(--secondary)11; }
+            100% { box-shadow: 0 0 19px 9px var(--success)99, 0 0 46px 22px var(--secondary)11; }
+          }
+          @keyframes moodBtnShimmer {
+            from { filter: brightness(1.18) saturate(1.24) drop-shadow(0 0 7.5px var(--accent)); }
+            50% { filter: brightness(1.35) saturate(1.42) drop-shadow(0 0 22px var(--accent)); }
+            to { filter: brightness(1.19) saturate(1.15) drop-shadow(0 0 7px var(--accent)); }
+          }
+        `}
+      </style>
       <label htmlFor="mood-select" style={{
         fontWeight: 500,
         marginRight: 8,
@@ -103,10 +151,15 @@ function MoodSelector({ mood, setMood }) {
         }}
         value={customMood}
         onChange={handleCustomMoodChange}
+        aria-label="Custom mood input"
       />
       <button
         type="button"
-        className="btn"
+        className={
+          "btn mv-mood-selector-aibtn" +
+          (detectionState === "detecting" ? " mv-mood-selector-aibtn-detecting" : "") +
+          (detectionState === "detected" ? " mv-mood-selector-aibtn-detected" : "")
+        }
         disabled={detectionState === "detecting"}
         style={{
           marginLeft: 10,
