@@ -30,56 +30,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  /* SUPER vibrant, animated multi-gradient with floating spark/confetti overlay! */
-  background:
-    var(--home-overlay),
-    radial-gradient(ellipse 140% 120% at 50% 9%, #fff9f199 0%, #ffe3c255 20%, #ffe3c200 85%),
-    linear-gradient(120deg, #fff8e7 73%, #fffaf5 86%, #fbeaf7 100%);
-  /* Animate subtle color dance */
-  animation: bgGradientFlow 8s linear infinite alternate;
   overflow-x: hidden;
   position: relative;
-}
-body::before {
-  /* Spark elements dancing in the background */
-  content: '';
-  position: fixed;
-  z-index: 0;
-  pointer-events: none;
-  left: 0; top: 0; right: 0; bottom: 0;
-  opacity: 0.31;
-  background-image:
-    radial-gradient(circle, var(--sparkle) 0%, transparent 70%),
-    radial-gradient(circle at 68% 25%, var(--sparkle2) 0%, transparent 60%),
-    radial-gradient(circle at 89% 55%, var(--sparkle3) 0%, transparent 63%),
-    radial-gradient(circle at 12% 89%, var(--sparkle4) 0%, transparent 75%);
-  animation: sparkleFlow 14s linear infinite alternate;
-}
-
-/* Animated background keyframes */
-@keyframes bgGradientFlow {
-  0% {
-    filter: hue-rotate(0deg) brightness(1) saturate(1.02);
-    background-position: 60% 0, 51% 6%, 60% 0, 0 0;
-  }
-  40% {
-    filter: hue-rotate(7deg) brightness(1.03) saturate(1.10);
-    background-position: 54% 9%, 59% 0%, 65% 13%, 5% 3%;
-  }
-  60% {
-    filter: hue-rotate(11deg) brightness(1.08) saturate(1.17);
-    background-position: 58% 4%, 57% 8%, 52% 3%, 8% 1%;
-  }
-  100% {
-    filter: hue-rotate(17deg) brightness(1.14) saturate(1.17);
-    background-position: 68% 12%, 65% 17%, 45% 10%, 14% 8%;
-  }
-}
-
-@keyframes sparkleFlow {
-  from { background-position: 0% 0%, 100% 0, 75% 100%, 10% 90%; opacity: 0.24; }
-  50% { background-position: 50% 9%, 55% 60%, 83% 65%, 17% 95%; opacity: 0.37; }
-  to   { background-position: 75% 12%, 13% 20%, 87% 36%, 8% 70%; opacity: 0.29; }
 }
 
 .app {
