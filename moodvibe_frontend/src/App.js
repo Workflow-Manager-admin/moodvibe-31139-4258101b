@@ -1,29 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import MoodSelector from './components/MoodSelector';
 
 /**
  * MoodVibe Main App Container
  * Scaffolds: Mood Selector, Content Feed, Tabs, Bottom Bar.
- * All sections are placeholders for next step logic/components.
+ * Holds the state for detected/user-selected mood.
  */
 // PUBLIC_INTERFACE
 function App() {
+  // Mood state managed at the top level
+  const [mood, setMood] = useState("");
+
   return (
     <div className="app">
       {/* Mood Selector Area (Top) */}
       <div className="mood-selector-area">
-        <div className="mood-selector-placeholder">
-          {/* Placeholder for Mood Selector UI */}
-          Mood Selector Placeholder (e.g., emoji, input, or AI prompt)
-        </div>
+        {/* MoodSelector UI with lifted state */}
+        <MoodSelector mood={mood} setMood={setMood} />
       </div>
 
       {/* Content Feed (Center) */}
       <div className="content-feed-area">
         <div className="content-feed-placeholder">
           {/* Placeholder for Dynamic Content Feed */}
-          Content Feed Placeholder<br/>
-          (Memes, Jokes, GIFs, Quotes tailored to your mood)
+          {mood
+            ? <>Content Feed Placeholder<br/>(memes, jokes, GIFs, quotes for <span style={{color: "var(--primary)", fontWeight: 600}}>{mood}</span>)</>
+            : <>Content Feed Placeholder<br/>(Memes, Jokes, GIFs, Quotes tailored to your mood)</>
+          }
         </div>
       </div>
 
