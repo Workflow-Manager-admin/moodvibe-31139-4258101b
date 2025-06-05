@@ -166,10 +166,10 @@ body {
 
 /* Utility styles */
 .vibrant-border {
-  border: 2.5px solid var(--primary);
+  border: 1.5px solid var(--border-color);
   border-radius: 9px;
-  background: #fffefb;
-  box-shadow: 0 1.5px 7px var(--primary), 0 0.5px 1px #ffd88a22;
+  background: #fff;
+  box-shadow: none;
 }
 
 .flex-centering {
