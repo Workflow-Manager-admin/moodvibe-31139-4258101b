@@ -180,6 +180,263 @@ body {
   justify-content: center;
 }
 
+/* --- Profile Vibrant Styles (MoodVibe) --- */
+.mv-profile-vibrant {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  padding: 44px 0 120px 0;
+  min-height: 68vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-radius: 30px;
+  box-shadow: var(--shadow), 0 8px 36px -10px var(--accent)25;
+  margin-top: 36px;
+  overflow: visible;
+  animation: mvProfileFade 0.75s cubic-bezier(.16,1.28,.37,1);
+}
+@keyframes mvProfileFade {
+  from { opacity: 0; transform: translateY(32px) scale(.97);}
+  to { opacity: 1; transform: translateY(0) scale(1);}
+}
+
+/* Joyful emoji stickers floating around the profile */
+.mv-profile-sticker {
+  position: absolute;
+  z-index: 22;
+  font-size: 1.65rem;
+  pointer-events: none;
+  opacity: .81;
+  user-select: none;
+  filter: saturate(1.2) drop-shadow(0 2px 9px #fff7);
+  animation: profileStickerDance 2.6s infinite alternate cubic-bezier(.6,1.7,.6,1.1);
+}
+.mv-profile-sticker1 { top: 24px; left: 5%; animation-delay: 0s;}
+.mv-profile-sticker2 { top: 11%; right: 6%; font-size: 1.34rem; animation-delay: 0.59s;}
+.mv-profile-sticker3 { bottom: 22%; left: 4%; font-size: 1.75rem; animation-delay: 1.13s;}
+@keyframes profileStickerDance {
+  0% { transform: translateY(0) rotate(-8deg); }
+  100% { transform: translateY(-13px) scale(1.13) rotate(8deg);}
+}
+
+.mv-profile-avatar-gradient {
+  background: var(--gradient-multicolor);
+  border-radius: 50%;
+  width: 113px;
+  height: 113px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  margin-top: -64px;
+  box-shadow: 0 4px 38px var(--accent)38, 0 6px 24px #ffc6d534, 0 0 0 7px #fff;
+  border: 5px solid #fff;
+  position: relative;
+  transition: box-shadow .24s;
+}
+.mv-profile-avatar-gradient:hover, .mv-profile-avatar-gradient:focus-visible {
+  box-shadow:
+    0 8px 42px var(--secondary)42,
+    0 2.5px 11px var(--primary)22,
+    0 0 0 8.5px #fff9;
+}
+.mv-profile-avatar-emoji {
+  font-size: 4.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 1.5px 9px #fff6);
+}
+
+.mv-profile-username {
+  color: var(--primary);
+  font-size: 2.26rem;
+  margin: 0 0 6px 0;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+  text-shadow: 0 3px 22px #fff7, 0 1px 4px var(--primary)15;
+  text-align: center;
+  transition: text-shadow .22s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mv-profile-desc {
+  font-size: 1.08rem;
+  color: var(--text-secondary);
+  margin-bottom: 17px;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: .05em;
+}
+.mv-profile-desc-highlight {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mv-profile-userstats {
+  margin: 8px 0 0 0;
+  box-shadow: 0 2.5px 12px var(--secondary)18, var(--shadow);
+  padding: 16px 17px;
+  min-width: 220px;
+  max-width: 330px;
+  text-align: left;
+  font-size: 1.13rem;
+  border-radius: 15px;
+  border: 2.5px solid var(--accent);
+  background: #fff;
+  position: relative;
+  z-index: 2;
+}
+.mv-profile-moodchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(89deg, var(--primary)44 73%, var(--secondary)33 100%);
+  color: var(--primary);
+  border-radius: 18px;
+  padding: 3.5px 12px 3.5px 8px;
+  font-weight: 700;
+  font-size: 1.09em;
+  box-shadow: 0 1.5px 7px var(--primary)23;
+  margin-left: 7px;
+  margin-top: 3px;
+  animation: moodchipPulse 2.8s infinite alternate cubic-bezier(.4,1.7,.4,1.1);
+}
+@keyframes moodchipPulse {
+  0% { filter: brightness(1) drop-shadow(0 1px 4px #fff2);}
+  100% { filter: brightness(1.17) drop-shadow(0 2.5px 9px var(--accent)22);}
+}
+.mv-profile-moodemoji {
+  font-size: 1.36em;
+  margin-right: 2px;
+}
+.mv-profile-moodtext { font-size: 1.05em; color: var(--primary); font-weight: 800;}
+
+.mv-profile-history-block {
+  margin-top: 34px;
+  width: 90%;
+  max-width: 340px;
+  background: linear-gradient(90deg, #fffdf6 44%, #fff1fa 100%);
+  border-radius: 18px;
+  padding: 22px 7px 17px 7px;
+  box-shadow: 0 1.5px 11px var(--accent)14, var(--shadow);
+  border-top: 1.5px solid var(--secondary);
+  position: relative;
+}
+.mv-profile-history-title {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1.13rem;
+  letter-spacing: 0.7px;
+  margin-bottom: 12px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  justify-content: center;
+}
+
+.mv-profile-moodlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+}
+.mv-profile-moodlist-item {
+  background: linear-gradient(90deg, var(--secondary)13 62%, var(--accent)08 100%);
+  border-radius: 11px;
+  padding: 8px 13px 8px 13px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--secondary);
+  font-size: 1.05rem;
+  font-weight: 600;
+  box-shadow: 0 0.9px 5.5px var(--secondary)11;
+  border: 1.7px solid var(--primary)18;
+  position: relative;
+  transition: box-shadow 0.19s, border 0.18s;
+}
+.mv-profile-moodlist-item:hover, .mv-profile-moodlist-item:focus-visible {
+  box-shadow: 0 3px 22px var(--accent)18, 0 2px 8px var(--primary)18;
+  border: 1.7px solid var(--primary);
+  background: linear-gradient(91deg, var(--accent)17 41%, var(--secondary)12 100%);
+  color: var(--primary);
+  z-index: 1;
+}
+.mv-profile-history-emoji {
+  font-size: 1.41em;
+  margin-right: 7px;
+  margin-left: 2px;
+}
+.mv-profile-history-mood {
+  flex: 1;
+  font-weight: 800;
+  color: var(--accent);
+  font-size: 1.08em;
+  text-shadow: 0 1.5px 5px #fff5;
+}
+.mv-profile-history-time {
+  color: var(--text-secondary);
+  font-size: 0.98em;
+  font-weight: 500;
+  margin-left: 8px;
+  margin-right: 2px;
+}
+.mv-profile-history-crown {
+  font-size: 1.33em;
+  margin-left: 6px;
+  margin-right: -2px;
+  filter: drop-shadow(0 1.5px 8px var(--primary));
+  animation: crownWobble 2.65s infinite alternate cubic-bezier(.7,2.1,.34,1.2);
+}
+@keyframes crownWobble {
+  0% { transform: rotate(-9deg) scale(1);}
+  100% { transform: rotate(13deg) scale(1.16);}
+}
+
+.mv-profile-footer-cheer {
+  margin-top: 44px;
+  font-size: 1.19rem;
+  color: var(--primary);
+  font-weight: 800;
+  text-shadow: 0 1.5px 6px var(--primary)21, 0 2.5px 10px var(--accent)18;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.mv-profile-moodvibe {
+  color: var(--accent);
+  font-weight: 900;
+  margin: 0 4px;
+  text-shadow: 0 1.5px 4px var(--accent)28;
+  font-size: 1.17em;
+}
+
+/* Responsive: Profile card on mobile */
+@media (max-width: 600px) {
+  .mv-profile-vibrant {
+    max-width: 99vw;
+    border-radius: 0 !important;
+    margin: 0 0 8vw 0 !important;
+    padding: 31px 0 76px 0;
+  }
+  .mv-profile-userstats { min-width: 0 !important; font-size: 0.97rem;}
+  .mv-profile-history-block { max-width: 97vw; padding-left: 0; padding-right: 0;}
+  .mv-profile-avatar-gradient { width: 98px; height: 98px; margin-top: -52px;}
+  .mv-profile-username { font-size: 1.44em;}
+}
+
+/* End Profile Styles -- */
+
 /* Button style overhaul */
 .btn {
   background: linear-gradient(90deg, var(--primary), var(--secondary) 90%);
