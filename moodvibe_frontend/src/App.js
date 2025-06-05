@@ -9,6 +9,7 @@ import ContentFeed from './components/ContentFeed';
 import TabNavigation from './components/TabNavigation';
 import BottomBar from './components/BottomBar';
 import BannerHeader from './components/BannerHeader';
+import Settings from './components/Settings';
 
 // PUBLIC_INTERFACE
 /**
@@ -130,6 +131,7 @@ function InnerApp() {
           }
         />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/settings" element={<require('./components/Settings').default />} />
       </Routes>
       <BottomBar onNav={handleBottomNav} />
     </div>
