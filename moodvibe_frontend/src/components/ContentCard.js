@@ -125,6 +125,17 @@ function ContentCard({ contentType, contentValue }) {
       tabIndex={0}
       style={cardStyle}
       aria-label={contentType + " content card"}
+      onMouseDown={e => {
+        // Add pressed state for ripple effect if time permits
+        e.currentTarget.classList.add("activated");
+        setTimeout(() => e.currentTarget.classList.remove("activated"), 220);
+      }}
+      onKeyDown={e => {
+        if (["Enter", " "].includes(e.key)) {
+          e.currentTarget.classList.add("activated");
+          setTimeout(() => e.currentTarget.classList.remove("activated"), 250);
+        }
+      }}
     >
       {/* Style block for animation & hover, JS-generated unique class for scoping */}
       <style>
@@ -132,17 +143,31 @@ function ContentCard({ contentType, contentValue }) {
         @keyframes mvCardFadeIn {
           from {
             opacity: 0;
-            transform: translateY(16px) scale(0.94);
+            transform: translateY(18px) scale(0.93);
+            filter: blur(1.5px);
           }
           to {
             opacity: 1;
             transform: translateY(0px) scale(1);
+            filter: blur(0px);
           }
         }
         .mv-content-card-${uniqueId}:hover, .mv-content-card-${uniqueId}:focus-visible {
-          box-shadow: 0 6px 36px ${style.accentRing}, 0 2.5px 18px 0 ${style.accentRing}, var(--shadow);
-          transform: scale(1.033) translateY(-3px) rotate(-0.6deg);
+          box-shadow: 0 7px 37px ${style.accentRing}, 0 2.5px 18px 0 ${style.accentRing}, var(--shadow);
+          transform: scale(1.037) translateY(-4px) rotate(-0.6deg);
+          outline: 2.8px solid ${style.color};
           z-index: 4;
+        }
+        .mv-content-card-${uniqueId}:active,
+        .mv-content-card-${uniqueId}.activated {
+          box-shadow: 0 1.5px 4px ${style.accentRing}, 0 0.8px 5.5px #3332, var(--shadow);
+          transform: scale(0.97) translateY(2px) rotate(0.3deg);
+          transition: transform 0.12s, box-shadow 0.12s;
+        }
+        .mv-content-card-${uniqueId} {
+          transition: box-shadow 0.24s cubic-bezier(.38,1.6,.44,1), 
+            transform 0.21s cubic-bezier(.47,1.87,.23,1),
+            outline 0.18s;
         }
         `}
       </style>
