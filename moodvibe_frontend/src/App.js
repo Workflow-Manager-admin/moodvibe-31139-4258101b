@@ -11,79 +11,30 @@ import BottomBar from './components/BottomBar';
 import BannerHeader from './components/BannerHeader';
 import Settings from './components/Settings';
 
+import Profile from './components/Profile';
+
+// Util for fetching/storing user info in localStorage
+function getStoredUser() {
+  const raw = localStorage.getItem("moodvibe_userprofile");
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+function setStoredUser(user) {
+  localStorage.setItem("moodvibe_userprofile", JSON.stringify(user));
+}
+
 // PUBLIC_INTERFACE
 /**
- * ProfilePage: Simple profile with vibrant MoodVibe theme.
+ * ProfilePage: Enhanced lively profile page.
  */
-function ProfilePage() {
+function ProfilePage({ user, onUserChange }) {
+  // Profile expects user object and edit handler (passed from App)
   return (
-    <div
-      style={{
-        margin: "0 auto",
-        width: "100%",
-        maxWidth: 520,
-        padding: "38px 0 100px 0",
-        minHeight: "68vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        background: "var(--bg-secondary)",
-        borderRadius: 24,
-        boxShadow: "var(--shadow)",
-        marginTop: 38,
-      }}
-    >
-      <div
-        style={{
-          background: "linear-gradient(91deg, var(--primary) 70%, var(--secondary) 100%)",
-          borderRadius: "50%",
-          width: 106,
-          height: 106,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 24,
-          marginTop: -54,
-          boxShadow: "0 2px 28px var(--accent)22",
-          border: "6px solid #fff",
-        }}
-      >
-        <span aria-label="user" style={{ fontSize: 62 }}>🧑‍🎤</span>
-      </div>
-      <h2 style={{
-        color: "var(--primary)",
-        fontSize: "2.1rem",
-        margin: "0 0 10px 0",
-        fontWeight: 800,
-        letterSpacing: 1,
-        textShadow: "0 2px 18px #fff7"
-      }}>
-        Your Profile
-      </h2>
-      <div style={{ fontSize: "1.05rem", color: "var(--text-secondary)", marginBottom: 22 }}>
-        Vibrant MoodVibe user<br />
-        <span style={{ color: "var(--accent)", fontWeight: 600 }}>Mood explorer</span>
-      </div>
-      <div
-        style={{
-          border: "2px solid var(--accent)",
-          borderRadius: 13,
-          background: "#fff",
-          margin: "8px 0 0 0",
-          boxShadow: "0 1.5px 9px var(--secondary)18, var(--shadow)",
-          padding: 16,
-          minWidth: 210,
-          textAlign: "left"
-        }}
-      >
-        <b style={{ color: "var(--secondary)" }}>Username:</b> <span style={{ color: "var(--text-color)" }}>demo_user</span>
-        <br />
-        <b style={{ color: "var(--secondary)" }}>Mood saved:</b> <span style={{ color: "var(--primary)" }}>Feeling Vibrant!</span>
-      </div>
-      <div style={{ marginTop: 33, fontSize: "1rem", color: "var(--secondary)" }}>
-        🎉 Cheers to positivity!
-      </div>
-    </div>
+    <Profile user={user} onUserChange={onUserChange} />
   );
 }
 
@@ -91,13 +42,37 @@ function ProfilePage() {
  * InnerApp: Contains the routed layout for MoodVibe.
  */
 function InnerApp() {
-  const [mood, setMood] = useState("");
+  // USER PROFILE STATE
+  const [user, setUser] = useState(() => {
+    // Try to load from localStorage; fallback if not, to defaults:
+    const stored = getStoredUser();
+    return (
+      stored || {
+        name: "Cheerful Explorer",
+        birthday: "",
+        mood: "",
+      }
+    );
+  });
+  const [mood, setMood] = useState(user.mood || "");
   const [selectedTab, setSelectedTab] = useState("Memes");
 
   const navigate = useNavigate();
 
+  // Reactively save user to localStorage whenever it changes
+  React.useEffect(() => {
+    setStoredUser(user);
+  }, [user]);
+
   // PUBLIC_INTERFACE
   const handleTabChange = (tab) => setSelectedTab(tab);
+
+  // Handler for updates from Profile component (updates user info)
+  const handleUserChange = (updated) => {
+    const merged = { ...user, ...updated };
+    setUser(merged);
+    if (updated.mood) setMood(updated.mood);
+  };
 
   // Navigation for bottom bar (routes home or profile)
   const handleBottomNav = (key) => {
@@ -106,10 +81,16 @@ function InnerApp() {
     } else if (key === "home") {
       navigate('/');
     }
-    // (settings reserved for future)
+    // settings goes here later
   };
 
   // Main themed app container
+  // BIRTHDAY CELEBRATION detector
+  const todayStr = new Date().toISOString().slice(5, 10); // MM-DD
+  const isBirthday = user.birthday && user.birthday.slice(5, 10) === todayStr;
+
+  // Future: show toast, celebration popup, etc, if isBirthday
+
   return (
     <div className="app" style={{ paddingBottom: 74 }}>
       <BannerHeader />
@@ -118,19 +99,44 @@ function InnerApp() {
           path="/"
           element={
             <>
+              {/* Mood selector still sets general app mood */}
               <div className="mood-selector-area">
                 <MoodSelector mood={mood} setMood={setMood} />
               </div>
               <div className="tabs-area">
                 <TabNavigation selectedTab={selectedTab} onTabChange={handleTabChange} />
               </div>
+              {/* Birthday celebration on home page */}
+              {isBirthday && (
+                <div style={{
+                  fontSize: "1.33rem",
+                  background: "var(--gradient-multicolor)",
+                  padding: "22px 24px 13px 24px",
+                  borderRadius: 23,
+                  margin: "14px auto 5px auto",
+                  maxWidth: 380,
+                  boxShadow: "0 2px 18px #ffb34733",
+                  textAlign: "center",
+                  color: "var(--accent)",
+                  fontWeight: 800,
+                  letterSpacing: "0.06em",
+                  animation: "mvCardFadeIn 0.82s cubic-bezier(.19,1.5,.29,1)",
+                }}>
+                  <span role="img" aria-label="birthday cake" style={{ fontSize: "2.2em", verticalAlign: "-0.25em" }}>🎂</span>
+                  &nbsp;Happy Birthday, {user.name || "MoodViber"}!&nbsp;
+                  <span role="img" aria-label="party popper">🎉</span><span role="img" aria-label="thumbs up">👍</span>
+                </div>
+              )}
               <div className="content-feed-area">
                 <ContentFeed mood={mood} selectedTab={selectedTab} />
               </div>
             </>
           }
         />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/profile"
+          element={<ProfilePage user={user} onUserChange={handleUserChange} />}
+        />
         <Route path="/settings" element={<Settings />} />
       </Routes>
       <BottomBar onNav={handleBottomNav} />
