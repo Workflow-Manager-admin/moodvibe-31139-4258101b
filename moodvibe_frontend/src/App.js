@@ -28,8 +28,11 @@ function App() {
     );
   }
 
+  // To prevent content from being hidden behind the fixed BottomBar,
+  // add padding-bottom to the main container equal (or slightly larger) to BottomBar's height.
+  // BottomBar is fixed, so we ensure the main content doesn't overlap.
   return (
-    <div className="app">
+    <div className="app" style={{ paddingBottom: 74 }}>
       {/* Mood Selector Area (Top) */}
       <div className="mood-selector-area">
         {/* MoodSelector UI */}
