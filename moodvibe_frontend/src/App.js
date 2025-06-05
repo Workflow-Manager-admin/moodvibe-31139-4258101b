@@ -23,13 +23,8 @@ function App() {
 
       {/* Content Feed (Center) */}
       <div className="content-feed-area">
-        <div className="content-feed-placeholder">
-          {/* Placeholder for Dynamic Content Feed */}
-          {mood
-            ? <>Content Feed Placeholder<br/>(memes, jokes, GIFs, quotes for <span style={{color: "var(--primary)", fontWeight: 600}}>{mood}</span>)</>
-            : <>Content Feed Placeholder<br/>(Memes, Jokes, GIFs, Quotes tailored to your mood)</>
-          }
-        </div>
+        {/* Vibrant Content Feed with themed cards */}
+        <ContentFeed mood={mood} />
       </div>
 
       {/* Tab Navigation (Above Bottom) */}
