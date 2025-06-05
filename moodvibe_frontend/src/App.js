@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+// Use react-router-dom v6+ API (ensure version installed)
+// Only import BrowserRouter, Routes, Route, and useNavigate from react-router-dom
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+
 import MoodSelector from './components/MoodSelector';
 import ContentFeed from './components/ContentFeed';
 import TabNavigation from './components/TabNavigation';
