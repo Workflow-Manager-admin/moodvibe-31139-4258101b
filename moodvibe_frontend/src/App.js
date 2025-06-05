@@ -148,9 +148,9 @@ function InnerApp() {
 // PUBLIC_INTERFACE
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <InnerApp />
-    </Router>
+    </BrowserRouter>
   );
 }
 
