@@ -1,6 +1,6 @@
 import React from "react";
 import "../App.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 /**
  * BottomBar
@@ -8,36 +8,24 @@ import { useNavigate, useLocation } from "react-router-dom";
  * Features: Profile, Home, and Settings actions as icon buttons.
  * - App theme color gradients.
  * - Clear animated feedback on active/hover/focus.
- * 
- * Props:
- *   active (string): one of "home" | "profile" | "settings" (optional, highlight selected)
- *   onNav (fn): function(key) — navigation hook (optional)
+ *
+ * This refactored version uses react-router-dom's navigation (Link) for SPA routing,
+ * removes legacy local state for "Profile",
+ * and highlights based on the current route. UI theme and structure is preserved.
  */
 // PUBLIC_INTERFACE
-function BottomBar({ active = "home", onNav }) {
+function BottomBar({ onNav }) {
   // Use router location for highlighting the active nav
-  const navigate = useNavigate();
   const location = useLocation();
 
   // Determine active key by route path
-  let routeActive = active;
+  let routeActive = "home";
   if (location.pathname === "/profile") {
     routeActive = "profile";
   } else if (location.pathname === "/" || location.pathname === "") {
     routeActive = "home";
   }
   // (settings reserved for future)
-
-  // Handler for SPA navigation via router
-  function handleNav(key) {
-    if (key === "profile") {
-      navigate("/profile");
-    } else if (key === "home") {
-      navigate("/");
-    }
-    // call onNav if present for backward/compat
-    if (onNav) onNav(key);
-  }
 
   // Button definitions with SVG icons (chosen for clarity & style)
   const navItems = [
@@ -59,6 +47,7 @@ function BottomBar({ active = "home", onNav }) {
           <path d="M4 19c0-3 4-5 8-5s8 2 8 5" />
         </svg>
       ),
+      path: "/profile",
     },
     {
       key: "home",
@@ -78,6 +67,7 @@ function BottomBar({ active = "home", onNav }) {
           <path d="M5 12v7a2 2 0 002 2h2.6a1 1 0 001-1v-3.8a1 1 0 011-1h1.8a1 1 0 011 1V20a1 1 0 001 1H17a2 2 0 002-2v-7" />
         </svg>
       ),
+      path: "/",
     },
     {
       key: "settings",
@@ -97,6 +87,7 @@ function BottomBar({ active = "home", onNav }) {
           <path d="M19.4 15a1.79 1.79 0 00.7 2.1 2 2 0 01-2.7 2.7 1.8 1.8 0 00-2.1-.7 1.8 1.8 0 00-1.1 1.7V22a2 2 0 01-4 0v-.2a1.8 1.8 0 00-1.1-1.7 1.8 1.8 0 00-2.1.7A2 2 0 013.9 17.1a1.8 1.8 0 00.7-2.1 1.8 1.8 0 00-1.7-1.1H2a2 2 0 010-4h.1a1.8 1.8 0 001.7-1.1 1.8 1.8 0 00-.7-2.1A2 2 0 014.9 4.9a1.8 1.8 0 002.1.7A1.8 1.8 0 008.1 3.9V3a2 2 0 014 0v.1a1.8 1.8 0 001.1 1.7 1.8 1.8 0 002.1-.7A2 2 0 0120.1 6.9a1.8 1.8 0 00-.7 2.1c.21.46.21.98 0 1.43a1.8 1.8 0 001.7 1.12H22a2 2 0 010 4h-.2a1.75 1.75 0 00-1.7 1.12z" />
         </svg>
       ),
+      path: "#", // reserved for future
     },
   ];
 
@@ -147,9 +138,9 @@ function BottomBar({ active = "home", onNav }) {
     background: isActive
       ? "rgba(255,255,255,0.09)"
       : "transparent",
+    textDecoration: "none",
   });
 
-  // Render SPA navigation and highlight active per route
   return (
     <nav className="bottom-bar" style={barStyle} aria-label="App bottom navigation">
       <style>
@@ -188,18 +179,69 @@ function BottomBar({ active = "home", onNav }) {
       </style>
       {navItems.map((item) => {
         const isActive = (routeActive === item.key);
+        // "Settings" is future only - not SPA nav yet
+        if (item.key === "settings" || !item.path || item.path === "#") {
+          return (
+            <button
+              key={item.key}
+              className="bottom-bar-navbtn"
+              type="button"
+              aria-label={item.label}
+              aria-current={isActive ? "true" : undefined}
+              tabIndex={0}
+              style={btnStyle(isActive)}
+              disabled
+            >
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 32,
+                  height: 32,
+                  borderRadius: "50%",
+                  background: isActive
+                    ? "rgba(255,179,71,0.22)"
+                    : "rgba(255,255,255,0.11)",
+                  marginBottom: 5,
+                  boxShadow: isActive
+                    ? "0 0 0 2px var(--primary)"
+                    : "",
+                  transition: "background 0.18s, box-shadow 0.16s",
+                  color: isActive ? "var(--primary)" : "#fff",
+                }}
+              >
+                {item.icon}
+              </span>
+              <span
+                style={{
+                  fontSize: "0.99rem",
+                  marginTop: 1,
+                  letterSpacing: 0.7,
+                  color: isActive ? "var(--primary)" : "#fff",
+                  fontWeight: isActive ? 700 : 500,
+                  textShadow: isActive
+                    ? "0 1px 3px #fff2"
+                    : "0 1px 3px #3333",
+                  transition: "color 0.18s"
+                }}
+              >
+                {item.label}
+              </span>
+            </button>
+          );
+        }
+        // For actual navigation, use <Link> for SPA and highlight
         return (
-          <button
+          <Link
+            to={item.path}
             key={item.key}
             className="bottom-bar-navbtn"
-            type="button"
             aria-label={item.label}
             aria-current={isActive ? "true" : undefined}
             tabIndex={0}
             style={btnStyle(isActive)}
-            onClick={() => {
-              handleNav(item.key);
-            }}
+            onClick={() => { if (onNav) onNav(item.key); }}
           >
             <span
               style={{
@@ -237,7 +279,7 @@ function BottomBar({ active = "home", onNav }) {
             >
               {item.label}
             </span>
-          </button>
+          </Link>
         );
       })}
     </nav>
