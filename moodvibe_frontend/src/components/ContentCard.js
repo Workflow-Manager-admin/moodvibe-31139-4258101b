@@ -69,15 +69,15 @@ function ContentCard({ contentType, contentValue }) {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    transition: "transform 0.22s cubic-bezier(.42,1.6,.44,1), box-shadow 0.25s",
     cursor: "pointer",
     position: "relative",
-    animation: "mvCardFadeIn 0.7s cubic-bezier(.18,1.2,.22,1)",
-    overflow: "hidden"
+    animation: "mvCardFadeIn 0.67s cubic-bezier(.18,1.2,.22,1)",
+    overflow: "hidden",
+    // Subtle breathing effect when focused
+    transition: "transform 0.21s cubic-bezier(.47,1.87,.23,1), box-shadow 0.24s cubic-bezier(.39,1.5,.38,1), outline 0.16s",
   };
 
-  // Inline keyframes for fade-in animation (scoped)
-  // Unique class for hover animation
+  // Unique class for hover/focus/keyframes scoping
   const uniqueId = Math.random().toString(36).slice(2, 10);
 
   // Helper for rendering contentValue appropriately (GIF = image, others = text)
