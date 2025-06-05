@@ -43,13 +43,13 @@ function BannerHeader() {
             font-size: 1.52rem;
             font-weight: 900;
             letter-spacing: 1.6px;
-            background: linear-gradient(91deg, var(--primary) 56%, var(--accent) 97%, var(--secondary) 74%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-            /* Accessible fallback: set color to white for contrast if gradient text fails */
             color: #fff !important;
+            /* Remove all text gradient and background clip styles for true white text */
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: #fff !important;
+            background-clip: unset !important;
+            text-fill-color: #fff !important;
             text-shadow: 0 2px 14px #222b, 0 3.5px 13px var(--primary)44, 0 0 2px #222b;
             padding: 0 0.4em;
             filter: brightness(1.15) drop-shadow(0 2px 8px var(--accent)22);
