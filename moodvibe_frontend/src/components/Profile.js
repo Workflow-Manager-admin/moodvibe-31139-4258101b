@@ -1,55 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "../App.css";
 
 /**
  * Profile (Ultra-vivid MoodVibe Edition!)
- * Joyously vibrant, avatar-centric, playful user profile—completely on-brand for MoodVibe.
- * Huge gradient avatar "card", expressive sticker/emoji clouds, bold type, animated badges, and fun themed accent touches.
+ * — Enhanced for editing Username, Birthday, and Mood, with vibrant emoji/thumbs-up visuals!
+ * — Data updates call onUserChange to persist, are saved in localStorage at top-level.
  */
 // PUBLIC_INTERFACE
-function Profile({ user }) {
-  // Demo fallback if no user data is passed
-  const [demoUser] = useState({
-    name: "Cheerful Explorer",
-    avatar: "🧑‍🎨", // Emoji or string
-    moods: [
-      { mood: "Happy", time: "Today", emoji: "😄" },
-      { mood: "Motivated", time: "Yesterday", emoji: "💪" },
-      { mood: "Excited", time: "2 days ago", emoji: "🤩" },
-    ],
-  });
-
-  const profile = user || demoUser;
-
-  // PUBLIC_INTERFACE
-  // Helper: playful sticker cloud collection (unique, animated, can vary in future)
-  const stickers = [
-    { className: "mv-profile-sticker mv-profile-sticker1", emoji: "✨", style: {} },
-    { className: "mv-profile-sticker mv-profile-sticker2", emoji: "🎈", style: {} },
-    { className: "mv-profile-sticker mv-profile-sticker3", emoji: "🌈", style: {} },
+function Profile({ user, onUserChange }) {
+  // Only fields: name, birthday (YYYY-MM-DD), mood (string)
+  const moodChoices = [
+    { mood: "Happy", emoji: "😄" },
+    { mood: "Excited", emoji: "🤩" },
+    { mood: "Motivated", emoji: "💪" },
+    { mood: "Bored", emoji: "😐" },
+    { mood: "Tired", emoji: "😴" },
+    { mood: "Anxious", emoji: "😬" },
+    { mood: "Calm", emoji: "🧘" },
+    { mood: "Sad", emoji: "😢" },
+    { mood: "Thrilled", emoji: "😃" },
+    { mood: "Chill", emoji: "😎" },
+    { mood: "Vibing", emoji: "🟣" },
+    { mood: "🤖 AI", emoji: "🤖" }
   ];
+
+  // Editable state (local form)
+  const [edit, setEdit] = useState({
+    name: user?.name || "",
+    birthday: user?.birthday || "",
+    mood: user?.mood || "",
+  });
+  const [savedNotif, setSavedNotif] = useState("");
+
+  // today check for birthday effect
+  const todayStr = new Date().toISOString().slice(5, 10); // MM-DD
+  const isBirthday = Boolean(edit.birthday && edit.birthday.slice(5, 10) === todayStr);
+
+  // Most recently selected mood for display in history (minimal demo logic)
+  const moodObj = useMemo(
+    () => moodChoices.find(m => m.mood === edit.mood) || { mood: edit.mood || "?", emoji: "🎭" },
+    [edit.mood]
+  );
+  const moodHistory = useMemo(
+    () =>
+      [edit.mood ? { mood: edit.mood, time: "Today", emoji: moodObj.emoji } : null]
+      .filter(Boolean),
+    [edit.mood, moodObj.emoji]
+  );
+
+  // Save handler: triggers onUserChange upward and shows a little celebration
+  function handleSave(e) {
+    e.preventDefault();
+    if (edit.name.trim()) {
+      onUserChange({ ...edit });
+      setSavedNotif("Profile saved! 👍");
+      setTimeout(() => setSavedNotif(""), 1500);
+    }
+  }
+
+  // Emoji options for sticker visuals
+  const stickers = [
+    { className: "mv-profile-sticker mv-profile-sticker1", emoji: "👍", style: { fontSize: "2.2em", top:28 } },
+    { className: "mv-profile-sticker mv-profile-sticker2", emoji: "✨", style: {} },
+    { className: "mv-profile-sticker mv-profile-sticker3", emoji: "🎉", style: {} },
+    { className: "mv-profile-sticker", emoji: "🥳", style: { top: "70%", right: "12%", fontSize: "1.3em" } }
+  ];
+
+  // Avatar emoji (first letter as fallback, or user name, or default)
+  function getAvatarEmoji() {
+    // Find recognisable emoji for mood, else art-palette, else fallback
+    if (moodObj.emoji && moodObj.emoji !== "🎭") return moodObj.emoji;
+    return "🧑‍🎨";
+  }
 
   // PUBLIC_INTERFACE
   return (
     <div className="mv-profile-container mv-profile-vibrant" style={{ overflow: "visible" }}>
-      {/* Floating Sticker/Emoji Fun: Joyful and animated */}
+      {/* Emojis/Stickers */}
       {stickers.map((s, i) => (
         <span key={i} className={s.className} aria-hidden="true" style={s.style}>
           {s.emoji}
         </span>
       ))}
 
-      {/* Large Vibrant Avatar with Emoji Bubble */}
+      {/* Vibrant Avatar + Confetti */}
       <div
         className="mv-profile-avatar-gradient"
         aria-label="User avatar"
         tabIndex={0}
-        style={{
-          position: "relative",
-          marginTop: -70,
-        }}
+        style={{ position: "relative", marginTop: -70 }}
       >
-        {/* Fun confetti/star edge pop! */}
         <span
           style={{
             position: "absolute",
@@ -59,7 +99,7 @@ function Profile({ user }) {
             opacity: 0.7,
             transform: "rotate(-14deg)",
             filter: "blur(.2px) brightness(1.13)",
-            pointerEvents: "none",
+            pointerEvents: "none"
           }}
           aria-hidden="true"
         >
@@ -70,14 +110,12 @@ function Profile({ user }) {
           aria-label="avatar"
           role="img"
           style={{
-            // Even larger avatar for playful vibe!
             fontSize: "4.95rem",
             filter: "drop-shadow(0 4px 18px #fff9)",
           }}
         >
-          {profile.avatar}
+          {getAvatarEmoji()}
         </span>
-        {/* Star burst accent */}
         <span
           style={{
             position: "absolute",
@@ -95,81 +133,200 @@ function Profile({ user }) {
         </span>
       </div>
 
-      {/* Username/title — bold, animated, in-your-face */}
-      <h2 className="mv-profile-username" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        {profile.name}
-        <span role="img" aria-label="crown" title="Mood Royalty" style={{ fontSize: "1.28em", filter: "drop-shadow(0 2px 8px #FFD70099)" }}>
-          {profile.moods[0]?.mood === "Happy" ? "👑" : "🥇"}
-        </span>
-      </h2>
-
-      {/* Subtitle/Description — expressive font, a touch of drama */}
-      <div className="mv-profile-desc" style={{ fontSize: "1.15rem", fontWeight: 600, margin: "0 0 15px 0" }}>
-        MoodVibe Explorer &mdash;
-        <span className="mv-profile-desc-highlight" style={{ fontWeight: 700, color: "var(--accent)", marginLeft: 7 }}>
-          spreading good vibes! <span role="img" aria-label="speaker">🔊</span>
-        </span>
-      </div>
-
-      {/* USERNAME & Latest Mood — on a vibrant, gradient "card" */}
-      <div className="mv-profile-userstats vibrant-border"
-        tabIndex={0}
+      {/* Profile form: Vibrant card with input fields */}
+      <form
+        onSubmit={handleSave}
         style={{
-          margin: "13px 0 0 0",
+          margin: "18px 0 0 0",
           background: "linear-gradient(90deg, #FFF7FB 41%, #FFF1EA 100%)",
           borderRadius: 22,
           minWidth: 220,
           maxWidth: 340,
           fontSize: "1.19rem",
           fontWeight: 600,
+          padding: "19px 16px 15px 16px",
+          boxShadow: "0 2.5px 12px var(--secondary)10, var(--shadow)",
+          border: "2px solid var(--primary)"
         }}
+        className="vibrant-border"
+        autoComplete="off"
       >
-        <b style={{ color: "var(--secondary)", fontWeight: 800, fontSize: "1.01em" }}>
-          Username:
-        </b>{" "}
-        <span style={{ color: "var(--text-color)", fontWeight: 700, textTransform: "lowercase", marginRight: 9 }}>
-          @{profile.name.toLowerCase().replace(/\s/g, "_")}
-        </span>
-        <br />
-        <b style={{ color: "var(--secondary)", fontWeight: 800, fontSize: "1.01em" }}>
-          Latest mood:
-        </b>
-        <span
-          className="mv-profile-moodchip"
+        {/* Username (Required) */}
+        <label htmlFor="username" style={{ color: "var(--secondary)", fontWeight: 800, fontSize: "1.01em", display: "block" }}>
+          Username
+          <span role="img" aria-label="wave" style={{ marginLeft: 7 }}>👋</span>
+        </label>
+        <input
+          id="username"
+          name="username"
+          maxLength={18}
+          required
+          autoFocus
+          className="vibrant-border"
           style={{
-            marginLeft: 9,
-            animation: "moodchipPulse 2.8s infinite alternate cubic-bezier(.4,1.7,.4,1.1)" // emphasize animation
+            background: "#fff",
+            color: "var(--accent)",
+            padding: "7px 12px",
+            borderRadius: 8,
+            fontWeight: 700,
+            fontSize: "1.12em",
+            border: "2px solid var(--secondary)",
+            marginTop: 6,
+            marginBottom: 15,
+            width: "95%"
           }}
-        >
-          <span className="mv-profile-moodemoji" aria-label={profile.moods[0]?.mood + " emoji"}>
-            {profile.moods[0]?.emoji}
-          </span>
-          <span className="mv-profile-moodtext">{profile.moods[0]?.mood}</span>
-        </span>
-      </div>
+          value={edit.name}
+          onChange={e => setEdit((p) => ({ ...p, name: e.target.value }))}
+          placeholder="Enter your nickname…"
+        />
 
-      {/* MOOD HISTORY — amusing icon header, animated list */}
+        {/* Birthday */}
+        <label htmlFor="birthday" style={{ color: "var(--secondary)", fontWeight: 800, fontSize: "1.01em", display: "block" }}>
+          Birthday
+          <span role="img" aria-label="birthday cake" style={{ marginLeft: 6 }}>🎂</span>
+        </label>
+        <input
+          id="birthday"
+          name="birthday"
+          type="date"
+          className="vibrant-border"
+          style={{
+            padding: "7px 10px",
+            borderRadius: 8,
+            fontWeight: 600,
+            fontSize: "1.04em",
+            border: "2px solid var(--primary)",
+            marginTop: 6,
+            marginBottom: 15,
+            color: "#e87a41",
+            width: "auto"
+          }}
+          value={edit.birthday || ""}
+          onChange={e => setEdit((p) => ({ ...p, birthday: e.target.value }))}
+        />
+        {/* Live birthday greeting */}
+        {isBirthday && (
+          <div style={{
+            marginBottom: 10,
+            fontWeight: 800,
+            color: "var(--accent)",
+            background: "linear-gradient(89deg, #fffbe1 73%, #fff2f7 100%)",
+            borderRadius: 13,
+            padding: "9px 12px",
+            fontSize: "1.03em",
+            boxShadow: "0 2px 9px rgba(255,179,71,0.16)",
+            textAlign: "center",
+            letterSpacing: ".02em",
+            animation: "moodchipPulse 1.3s infinite alternate cubic-bezier(.48,1.2,.25,1.2)"
+          }}>
+            <span role="img" aria-label="party">🎉</span> Happy Birthday! <span role="img" aria-label="thumbs up">👍</span>
+          </div>
+        )}
+
+        {/* Mood selector */}
+        <label htmlFor="mood" style={{ color: "var(--secondary)", fontWeight: 800, fontSize: "1.01em", display: "block" }}>
+          Current mood
+          <span role="img" aria-label="lightning" style={{ marginLeft: 6 }}>⚡️</span>
+        </label>
+        <select
+          id="mood"
+          name="mood"
+          className="vibrant-border"
+          style={{
+            padding: "7px 15px",
+            borderRadius: 8,
+            fontWeight: 700,
+            fontSize: "1.12em",
+            border: "2px solid var(--accent)",
+            marginTop: 7,
+            marginBottom: 8,
+            color: "var(--primary)",
+            width: "100%"
+          }}
+          value={edit.mood}
+          onChange={e => setEdit((p) => ({ ...p, mood: e.target.value }))}
+        >
+          <option value="">Select…</option>
+          {moodChoices.map(opt =>
+            <option key={opt.mood} value={opt.mood}>
+              {opt.emoji} {opt.mood}
+            </option>
+          )}
+        </select>
+        {edit.mood && (
+          <span className="mv-profile-moodchip"
+            style={{
+              marginTop: 2,
+              marginBottom: 7,
+              display: "inline-flex",
+              alignItems: "center"
+            }}>
+            <span className="mv-profile-moodemoji">{moodObj.emoji}</span>
+            <span className="mv-profile-moodtext">{edit.mood}</span>
+          </span>
+        )}
+
+        {/* Save button */}
+        <button
+          type="submit"
+          className="btn btn-large"
+          style={{
+            background: "linear-gradient(90deg, var(--primary), var(--accent) 98%)",
+            color: "#fff",
+            fontWeight: 700,
+            marginTop: 22,
+            fontSize: "1.09em",
+            borderRadius: 8,
+            border: "none",
+            boxShadow: "0 2px 8px #ffb34744"
+          }}>
+          <span role="img" aria-label="save" style={{ marginRight: 6 }}>💾</span>
+          Save Profile
+        </button>
+        {savedNotif && (
+          <span style={{
+            display: "block",
+            marginTop: 10,
+            fontWeight: 600,
+            color: "var(--success)",
+            fontSize: "1.04em",
+            letterSpacing: ".04em",
+            textShadow: "0 1.5px 7px #8ac92644",
+            transition: "opacity 0.21s",
+          }}>
+            {savedNotif} <span role="img" aria-label="thumbs up">👍</span>
+          </span>
+        )}
+      </form>
+
+      {/* MOOD HISTORY — optional/histogram */}
       <div className="mv-profile-history-block"
         style={{
           marginTop: 37,
-          paddingBottom: 22,
+          paddingBottom: 19,
           background: "linear-gradient(92deg, #fff1fa 42%, #ffe7f0 100%)",
-        }}
-      >
+        }}>
         <div className="mv-profile-history-title" style={{ gap: 8, fontSize: "1.18em" }}>
           <span role="img" aria-label="star sparkle">💫</span>
-          Mood History
-          <span role="img" aria-label="clock" style={{ fontSize: "1em", opacity: 0.7, marginLeft: 5 }}>⏰</span>
+          Mood
+          <span style={{ margin: "0 5px" }}>|</span>
+          History <span role="img" aria-label="clock" style={{ fontSize: "1em", opacity: 0.7, marginLeft: 2 }}>⏰</span>
         </div>
         <ul className="mv-profile-moodlist">
-          {profile.moods.map((entry, idx) => (
+          {!moodHistory.length && (
+            <li className="mv-profile-moodlist-item" style={{ opacity: 0.62 }}>
+              <span className="mv-profile-history-emoji">🤔</span>
+              <span className="mv-profile-history-mood">No mood selected yet</span>
+            </li>
+          )}
+          {moodHistory.map((entry, idx) => (
             <li
               className="mv-profile-moodlist-item"
-              key={idx}
+              key={entry.mood + idx}
               tabIndex={0}
               style={{
                 animation: "fadeInMoodCard .53s cubic-bezier(.28,1.18,.32,1) both",
-                animationDelay: `${0.07 + 0.10 * idx}s`
+                animationDelay: `${0.09 + 0.10 * idx}s`
               }}
             >
               <span className="mv-profile-history-emoji" role="img" aria-label={entry.mood + " mood"}>
@@ -179,32 +336,14 @@ function Profile({ user }) {
               <span className="mv-profile-history-time" style={{ marginLeft: 7 }}>
                 {entry.time}
               </span>
-              {/* Fun badge, special for newest mood */}
               {idx === 0 && (
-                <span className="mv-profile-history-crown" title="Current top mood">
+                <span className="mv-profile-history-crown" title="Current mood">
                   👑
-                </span>
-              )}
-              {/* Add a surprise sticker: */}
-              {idx === 1 && (
-                <span
-                  role="img"
-                  aria-label="muscle badge"
-                  style={{
-                    fontSize: "1.36em",
-                    marginLeft: 7,
-                    filter: "drop-shadow(0 1.5px 7px #6ec6ff75)",
-                    animation: "stickerBounce 1.6s infinite alternate cubic-bezier(.41,1.7,.38,1.25)",
-                  }}
-                  title="Motivated badge"
-                >
-                  💥
                 </span>
               )}
             </li>
           ))}
         </ul>
-        {/* List item fade-in keyframes */}
         <style>
           {`
             @keyframes fadeInMoodCard {
@@ -219,23 +358,22 @@ function Profile({ user }) {
         </style>
       </div>
 
-      {/* Joyful, on-theme, animated footer cheer */}
+      {/* Footer - playful, on-theme */}
       <div className="mv-profile-footer-cheer"
         style={{
-          marginTop: 44,
-          fontSize: "1.25rem",
+          marginTop: 42,
+          fontSize: "1.17rem",
           letterSpacing: ".07em",
-        }}
-      >
-        <span role="img" aria-label="party popper" style={{ marginRight: 5 }}>🎉</span>
-        Keep glowing with
-        <span className="mv-profile-moodvibe" style={{ margin: "0 6px", color: "var(--accent)", fontWeight: 900, fontSize: "1.17em"}}>
+        }}>
+        <span role="img" aria-label="celebrate" style={{ marginRight: 6 }}>🥳</span>
+        Stay radiant with
+        <span className="mv-profile-moodvibe" style={{ margin: "0 9px", color: "var(--accent)", fontWeight: 900, fontSize: "1.13em" }}>
           MoodVibe
         </span>
-        <span role="img" aria-label="star">✨</span>
+        <span role="img" aria-label="sparkle">✨</span>
         <span
           role="img"
-          aria-label="dizzy"
+          aria-label="star"
           style={{
             marginLeft: 7,
             fontSize: "1.12em",
