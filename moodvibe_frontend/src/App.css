@@ -561,38 +561,25 @@ body {
   transition: border-radius 0.16s, max-width 0.16s, padding 0.17s, margin 0.14s,
     min-height 0.15s, box-shadow 0.17s, background 0.18s;
 }
-/* Ultra-vibrant mv-content-card hover/focus effect (motion, soft glow, animated border) */
+
 .mv-content-card {
   position: relative;
   overflow: visible;
   z-index: 2;
   box-shadow: var(--shadow);
 }
+
 .mv-content-card:hover,
 .mv-content-card:focus-visible {
-  box-shadow: 0 9px 34px 3px #ff6f9122, 0 2px 21px 3px #ffb34733, 0 2.5px 9px #6ec6ff33, var(--shadow);
-  filter: brightness(1.07) saturate(1.07);
-  --mvcard-anim-hue: 12deg;
+  box-shadow: 0 7px 28px 0 #bbb2, var(--shadow);
+  filter: none;
 }
 .mv-content-card:active {
-  box-shadow: 0 3px 8px #ffb34722, 0 1px 4px #ff6f9112;
-  filter: brightness(0.98);
-  --mvcard-anim-hue: -18deg;
+  box-shadow: var(--shadow);
+  filter: none;
 }
 .mv-content-card::after {
-  content: '';
-  display: block;
-  pointer-events: none;
-  z-index: 3;
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  box-shadow: 0 0 0 0px #fff0, 0 0 0 0px #fffa;
-  /* animate a soft inner spark glowing ring on hover */
-  transition: box-shadow .31s cubic-bezier(.25,1.65,.45,1.18), background .18s;
-}
-.mv-content-card:hover::after, .mv-content-card:focus-visible::after {
-  box-shadow: 0 0 0 5.5px #ffe3c277, 0 0 0 15px #ffd1eb38;
+  display: none;
 }
 
 /* Hide old/unused styles (navbar, hero, logo, etc. are not used in final app) */
