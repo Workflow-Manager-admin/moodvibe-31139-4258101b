@@ -265,6 +265,24 @@ body::before {
   font-size: 1rem;
 }
 
+/* Fancy tab underline shimmer for .tab-animated-underline (TabNavigation) */
+.tab-animated-underline {
+  animation: tabUnderlineShine 3.6s linear infinite;
+  background: linear-gradient(
+    94deg,
+    var(--primary)66 0%,
+    var(--secondary)55 60%,
+    var(--accent)88 90%,
+    #fff 100%
+  ) !important;
+  background-size: 400% 100%;
+}
+@keyframes tabUnderlineShine {
+  0%   { background-position: 0% 0%; }
+  80%  { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
+}
+
 /* Bottom Bar */
 .bottom-bar {
   width: 100%;
