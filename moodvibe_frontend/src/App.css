@@ -289,7 +289,7 @@ body::before {
   min-height: 58px;
   box-sizing: border-box;
   background: var(--gradient-bottom);
-  box-shadow: 0 -2px 14px rgba(255,111,145,0.13);
+  box-shadow: 0 -2px 14px rgba(255,111,145,0.13), 0 -4px 30px #ff6f9177;
   border-top-left-radius: var(--bar-radius);
   border-top-right-radius: var(--bar-radius);
   display: flex;
@@ -301,6 +301,18 @@ body::before {
   max-width: 520px;
   margin: 0 auto;
   animation: slideUpBar 0.7s cubic-bezier(.31,1.5,.41,1);
+}
+
+/* Lively pulse for BottomBar active nav */
+.bottom-bar .bottom-bar-navbtn[aria-current="true"] span {
+  animation: bottomBarActivePulse 1s alternate infinite cubic-bezier(.4,1.66,.26,1.06);
+  box-shadow: 0 2.5px 9px #fff9b3, 0 0.5px 7px var(--primary)22;
+}
+
+@keyframes bottomBarActivePulse {
+  0%   { filter: brightness(1.06) saturate(1.14);}
+  60%  { filter: brightness(1.17) saturate(1.37);}
+  100% { filter: brightness(1.08) saturate(1.24);}
 }
 
 @keyframes slideUpBar {
