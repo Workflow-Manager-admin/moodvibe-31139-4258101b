@@ -48,10 +48,12 @@ function BannerHeader() {
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-fill-color: transparent;
-            text-shadow: 0 2px 14px #fff8, 0 3.5px 13px var(--primary)44;
+            /* Accessible fallback: set color to white for contrast if gradient text fails */
+            color: #fff !important;
+            text-shadow: 0 2px 14px #222b, 0 3.5px 13px var(--primary)44, 0 0 2px #222b;
             padding: 0 0.4em;
-            filter: brightness(1.19) drop-shadow(0 2px 8px var(--accent)22);
-            transition: text-shadow 0.2s, filter 0.2s;
+            filter: brightness(1.15) drop-shadow(0 2px 8px var(--accent)22);
+            transition: text-shadow 0.2s, filter 0.2s, color 0.2s;
           }
           .mv-banner-header:hover .mv-banner-title, .mv-banner-header:focus-visible .mv-banner-title {
             filter: brightness(1.30) drop-shadow(0 4px 10px var(--secondary)33);
