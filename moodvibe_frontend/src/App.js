@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import MoodSelector from './components/MoodSelector';
+import ContentFeed from './components/ContentFeed';
 
 /**
  * MoodVibe Main App Container
